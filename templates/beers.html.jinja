@@ -1,12 +1,10 @@
-<!DOCTYPE html>
-<html lang="fr">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Le bar de la Tanière | Bières</title>
-</head>
-<body>
-    <h2>Le bar de la Tanière</h2>
+{% extends "base.html" %}
+
+{% block title %}
+    Bières
+{% endblock %}
+
+{% block content %}
     <h4>Bières</h4>
 
     <!-- Search engine -->
@@ -23,5 +21,4 @@
         </li>
         {% endfor %}
     </ul>
-</body>
-</html>
+{% endblock %}

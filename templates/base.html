@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    {% block header %}
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>{% block title %}{% endblock %} | Le bar de la Tanière</title>
+    {% endblock %}
+</head>
+<body>
+
+    <!-- Navbar -->
+    <div class="navbar"></div>
+
+    <h2>Le bar de la Tanière</h2>
+
+    {% block content %}
+    {% endblock %}
+
+    <div class="footer"></div>
+    
+</body>
+</html>

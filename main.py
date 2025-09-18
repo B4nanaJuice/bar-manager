@@ -82,7 +82,7 @@ def beers():
         beers: list = [b for b in stocks["beers"] if b["type"] == beer_type]
 
     # Render the template with the wanted beers
-    return render_template("beers.html", beers = beers)
+    return render_template("beers.html.jinja", beers = beers)
 
 @app.route("/cocktails", methods = ["GET", "POST"])
 def cocktails():
