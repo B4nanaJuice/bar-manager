@@ -1,1 +1,18 @@
-{}
+[
+  {
+    "name": "Daiquiri",
+    "ingredients": [
+      { "name": "Rhum", "quantity": 5 },
+      { "name": "Jus citron", "quantity": 3 },
+      { "name": "Sirop simple", "quantity": 2 }
+    ]
+  },
+  {
+    "name": "Bee's knee",
+    "ingredients": [
+      { "name": "Gin", "quantity": 6 },
+      { "name": "Jus citron", "quantity": 2 },
+      { "name": "Sirop miel", "quantity": 1.5 }
+    ]
+  }
+]
