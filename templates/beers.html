@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Le bar de la Tanière | Bières</title>
+</head>
+<body>
+    <h2>Le bar de la Tanière</h2>
+    <h4>Bières</h4>
+
+    <!-- Search engine -->
+    <a href="/beers?beer_type=Blanche">Blanche</a>
+    <a href="/beers?beer_type=Blonde">Blonde</a>
+    <a href="/beers?beer_type=Brune">Brune</a>
+    <a href="/beers?beer_type=Ambree">Ambrée</a>
+
+    <!-- Show the data -->
+    <ul>
+        {% for beer in beers %}
+        <li>
+            {{ beer.name }} ({{ beer.type }}) {{ beer.degree }}°
+        </li>
+        {% endfor %}
+    </ul>
+</body>
+</html>
