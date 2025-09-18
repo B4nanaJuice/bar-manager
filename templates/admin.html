@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <h2>Paned admin</h2>
+    <form action="/admin" method="post">
+      <h4>Bières</h4>
+      <ul>
+        {% for beer in beers %}
+        <li>
+          <input
+            name="beerName"
+            type="text"
+            value="{{ beer.name }}"
+            placeholder="Nom"
+            required
+          />
+          <input
+            name="beerType"
+            type="text"
+            value="{{ beer.type }}"
+            placeholder="Type"
+            required
+          />
+          <input
+            name="beerDegree"
+            type="number"
+            value="{{ beer.degree }}"
+            placeholder="Degré"
+            required
+          />
+          <button type="button" onclick="this.parentElement.remove()">X</button>
+        </li>
+        {% endfor %}
+        <button type="button" onclick="addBeerLine(this.parentElement, this)">
+          +
+        </button>
+      </ul>
+
+      <h4>Ingrédients</h4>
+      <ul>
+        {% for i in ingredients_list %}
+        <li>
+          {% if i in ingredients %}
+          <input type="checkbox" name="{{ i }}" checked />
+          {% else %}
+          <input type="checkbox" name="{{ i }}" />
+          {% endif %}
+          <label for="{{ i }}">{{ i }}</label>
+        </li>
+        {% endfor %}
+      </ul>
+
+      <input type="submit" value="Update" />
+    </form>
+  </body>
+
+  <script src="{{ url_for('static', filename = 'addBeerLine.js') }}"></script>
+</html>
