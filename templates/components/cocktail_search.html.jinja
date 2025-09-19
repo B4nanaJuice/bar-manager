@@ -1,0 +1,21 @@
+{% macro cocktail_search() %}
+
+<div class="cocktail_search">
+    <div class="ingredient_list">
+        <input type="text" class="input-tags" placeholder="Ingrédient">
+    </div>
+
+    <select name="cocktail_type">
+        <option value="" selected></option>
+        <option value="long">Long</option>
+        <option value="short">Short</option>
+        <option value="shot">Shot</option>
+    </select>
+
+    <button onclick="searchCocktails()">Rechercher</button>
+</div>
+
+<script src="{{ url_for('static', filename = 'searchCocktails.js') }}"></script>
+<script src="{{ url_for('static', filename = 'inputTagsManager.js') }}"></script>
+
+{% endmacro %}

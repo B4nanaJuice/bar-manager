@@ -66,13 +66,41 @@ def beers():
     # Render the template with the wanted beers
     return render_template("beers.html.jinja", page_title = "Bières", beers = beers)
 
-@app.route("/cocktails", methods = ["GET", "POST"])
+@app.route("/cocktails", methods = ["GET"])
 def cocktails():
-    if request.method == "POST":
-        pass
+    # Get URL arguments
+    cocktail_type: str = request.args.get("cocktail_type", default = "")
+    ingredient_preferences: str = request.args.get("ingredient_preferences", default = "")
 
-    cocktails = []
-    return render_template("cocktails.html.jinja", page_title = "Cocktails", cocktails = cocktails)
+    # Get ingredients stock
+    with open("data/stocks.json", encoding='utf-8') as f:
+        stocks = json.loads(f.read())
+        available_ingredients = stocks["ingredients"]
+
+    # Get available cocktails
+    available_cocktails: list[dict] = get_available_cocktails(available_ingredients)
+
+    # Sort available cocktails if URL arguments
+    if cocktail_type != "":
+        available_cocktails = [_ for _ in available_cocktails if _["type"] == cocktail_type]
+
+    if ingredient_preferences != "":
+        ingredient_preferences: list[str] = ingredient_preferences.split(",")
+        # Variable matches = list of tuples having : 
+        # - in first place the cocktail itself
+        # - in second place the number of matches between the ingredients of the cocktail and the ingredient_preferences
+        matches: list[tuple] = [
+                (_c, len([_ for _ in [i["name"] for i in _c["ingredients"]] if _.lower() in [i.lower() for i in ingredient_preferences]]))
+                for _c in available_cocktails
+            ]
+        # Sort the mateches variable by number of matches
+        matches = sorted(matches, key = lambda t: t[1], reverse = True)
+        # Take only entries with at least 1 match
+        matches = [_ for _ in matches if _[1] >= 1]
+
+        available_cocktails = [_[0] for _ in matches]
+
+    return render_template("cocktails.html.jinja", page_title = "Cocktails", cocktails = available_cocktails)
 
 @app.route("/others", methods = ["GET"])
 def others():
@@ -84,4 +112,6 @@ def others():
     ingredients: list[str] = stocks["ingredients"]
     juices: list[str] = [_ for _ in ingredients if re.match(r"^Jus", _)]
     syrups: list[str] = [_ for _ in ingredients if re.match(r"^Sirop", _)]
+
+    # Render the template
     return render_template("others.html.jinja", page_title = "Autres", juices = juices, syrups = syrups)

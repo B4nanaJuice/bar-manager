@@ -1,13 +1,12 @@
 {% extends "base.html" %}
 {% from "components/cocktail_card.html.jinja" import cocktail_card %}
+{% from "components/cocktail_search.html.jinja" import cocktail_search %}
 
 {% block content %}
     <h4>{{ page_title }}</h4>
 
     <!-- Search engine -->
-    <form action="/cocktails" method="post">
-    
-    </form>
+    {{ cocktail_search()|safe }}
 
     <!-- Show the data -->
     <ul>
