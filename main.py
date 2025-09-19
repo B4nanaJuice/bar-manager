@@ -2,27 +2,9 @@ from flask import Flask, render_template, request, redirect, url_for
 import json
 import re
 
+from utils import get_available_cocktails
+
 app = Flask(__name__)
-
-def get_available_cocktails(available_ingredients: list) -> list:
-    with open("data/cocktails.json", encoding='utf-8') as f:
-        cocktails: list = json.loads(f.read())
-
-    available_cocktails: list = []
-    for cocktail in cocktails:
-        cocktail_ingredients = [ingredient["name"] for ingredient in cocktail["ingredients"]]
-        if len(list(set(cocktail_ingredients) - set(available_ingredients))) == 0:
-            available_cocktails.append(cocktail)
-
-    return available_cocktails
-
-# @app.route("/", methods = ["GET"])
-# def home():
-#     with open("data/stocks.json", encoding='utf-8') as f:
-#         stocks = json.loads(f.read())
-#     beers: list = stocks["beers"]
-#     cocktails: list = get_available_cocktails(stocks["ingredients"])
-#     return render_template("home.html", beers = beers, cocktails = cocktails)
 
 @app.route("/", methods = ["GET"])
 def home():
