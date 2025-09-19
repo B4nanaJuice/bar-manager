@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% from "components/cocktail_card.html.jinja" import cocktail_card %}
+
+{% block content %}
+    <h4>{{ page_title }}</h4>
+
+    <!-- Search engine -->
+    <form action="/cocktails" method="post">
+    
+    </form>
+
+    <!-- Show the data -->
+    <ul>
+        {% for cocktail in cocktails %}
+        <li>
+            {{ cocktail_card(cocktail)|safe }}
+        </li>
+        {% endfor %}
+    </ul>
+{% endblock %}

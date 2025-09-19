@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h4>Jus</h4>
+
+    <ul>
+        {% for juice in juices %}
+            <li>{{ juice }}</li>
+        {% endfor %}
+    </ul>
+
+    <h4>Sirops</h4>
+    <ul>
+        {% for syrup in syrups %}
+            <li>{{ syrup }}</li>
+        {% endfor %}
+    </ul>
+
+{% endblock %}
