@@ -1,6 +1,7 @@
 [
   {
     "name": "Daiquiri",
+    "type": "short",
     "ingredients": [
       { "name": "Rhum", "quantity": 5 },
       { "name": "Jus citron", "quantity": 3 },
@@ -9,6 +10,7 @@
   },
   {
     "name": "Bee's knee",
+    "type": "short",
     "ingredients": [
       { "name": "Gin", "quantity": 6 },
       { "name": "Jus citron", "quantity": 2 },
