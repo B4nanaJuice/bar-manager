@@ -64,7 +64,7 @@ def beers():
         beers: list = [b for b in stocks["beers"] if b["type"] == beer_type]
 
     # Render the template with the wanted beers
-    return render_template("beers.html.jinja", beers = beers)
+    return render_template("beers.html.jinja", page_title = "Bières", beers = beers)
 
 @app.route("/cocktails", methods = ["GET", "POST"])
 def cocktails():
@@ -72,7 +72,7 @@ def cocktails():
         pass
 
     cocktails = []
-    return render_template("cocktails.html", cocktails = cocktails)
+    return render_template("cocktails.html.jinja", page_title = "Cocktails", cocktails = cocktails)
 
 @app.route("/others", methods = ["GET"])
 def others():
@@ -84,4 +84,4 @@ def others():
     ingredients: list[str] = stocks["ingredients"]
     juices: list[str] = [_ for _ in ingredients if re.match(r"^Jus", _)]
     syrups: list[str] = [_ for _ in ingredients if re.match(r"^Sirop", _)]
-    return render_template("others.html", juices = juices, syrups = syrups)
+    return render_template("others.html.jinja", page_title = "Autres", juices = juices, syrups = syrups)
