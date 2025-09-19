@@ -1,0 +1,9 @@
+{% macro navbar() %}
+
+<div class="navbar">
+    <a href="{{ url_for('cocktails') }}">Cocktails</a>
+    <a href="{{ url_for('beers') }}">Bières</a>
+    <a href="{{ url_for('others') }}">Autres</a>
+</div>
+
+{% endmacro %}
