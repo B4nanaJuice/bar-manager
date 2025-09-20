@@ -1,11 +1,16 @@
-{% macro cocktail_search() %}
+{% macro cocktail_search(ingredients) %}
 
 <div class="cocktail_search">
     <div class="ingredient_list">
-        <input type="text" class="input-tags" placeholder="Ingrédient">
+        <input list="ingredients" type="text" class="input-tags" placeholder="Ingrédient">
+        <datalist id="ingredients">
+            {% for ingredient in ingredients %}
+            <option value="{{ ingredient }}" />
+            {% endfor %}
+        </datalist>
     </div>
 
-    <select name="cocktail_type">
+    <select name="cocktail_type" class="cocktail_type">
         <option value="" selected></option>
         <option value="long">Long</option>
         <option value="short">Short</option>

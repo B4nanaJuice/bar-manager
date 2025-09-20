@@ -100,7 +100,7 @@ def cocktails():
 
         available_cocktails = [_[0] for _ in matches]
 
-    return render_template("cocktails.html.jinja", page_title = "Cocktails", cocktails = available_cocktails)
+    return render_template("cocktails.html.jinja", page_title = "Cocktails", cocktails = available_cocktails, ingredients = available_ingredients)
 
 @app.route("/others", methods = ["GET"])
 def others():
