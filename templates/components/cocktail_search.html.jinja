@@ -5,7 +5,7 @@
         <input list="ingredients" type="text" class="input-tags" placeholder="Ingrédient">
         <datalist id="ingredients">
             {% for ingredient in ingredients %}
-            <option value="{{ ingredient }}" />
+            <option value="{{ ingredient }}">
             {% endfor %}
         </datalist>
         <button onclick="triggerNewTag()">+</button>
@@ -17,6 +17,9 @@
         <option value="short">Short</option>
         <option value="shot">Shot</option>
     </select>
+
+    <input type="checkbox" name="no_alcohol_option" id="no_alcohol_option">
+    <label for="no_alcohol_option">Sans alcool</label>
 
     <button onclick="searchCocktails()">Rechercher</button>
 </div>
