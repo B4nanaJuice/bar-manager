@@ -14,3 +14,7 @@ function generateSearchTag(tagName) {
     // Return the new tag
     return searchTag;
 }
+
+function isEmptyOrSpaces(str) {
+    return str === null || str.match(/^ *$/) !== null;
+}

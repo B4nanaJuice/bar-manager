@@ -11,10 +11,6 @@ function triggerNewTag() {
     addTag(newTagName);
 }
 
-function isEmptyOrSpaces(str) {
-    return str === null || str.match(/^ *$/) !== null;
-}
-
 function addTag(tagName) {
     newTag = generateSearchTag(tagName);
     if (newTag === null) return;
