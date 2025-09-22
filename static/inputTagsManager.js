@@ -16,13 +16,8 @@ function isEmptyOrSpaces(str) {
 }
 
 function addTag(tagName) {
-    if (isEmptyOrSpaces(tagName)) return;
-
-    newTag = document.createElement('span');
-    newTag.innerHTML = `
-        <p>${tagName}</p>
-        <button onclick='this.parentElement.remove()'>X</button>
-    `
+    newTag = generateSearchTag(tagName);
+    if (newTag === null) return;
 
     inputTags.parentElement.insertBefore(newTag, inputTags);
     inputTags.value = '';
