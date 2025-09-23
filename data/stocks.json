@@ -1,10 +1,1 @@
-{
-    "beers": [
-        {"name": "Weiss", "type": "Blanche", "degree": "5.2"}
-    ], "ingredients": [
-        "Rhum", 
-        "Rhum ambr\u00e9", 
-        "Gin", 
-        "Vodka", 
-        "Sirop grenadine", 
-        "Sirop orgeat", "Sirop miel", "Sirop simple", "Jus citron"]}
+{"beers": [{"name": "Weiss", "type": "Blanche", "degree": "5.2"}], "ingredients": ["Rhum", "Rhum ambr\u00e9", "Gin", "Vodka", "Sirop grenadine", "Sirop orgeat", "Sirop miel", "Sirop simple", "Jus orange", "Jus citron", "Jus banane"]}
