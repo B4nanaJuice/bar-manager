@@ -2,27 +2,32 @@
 let params = new URLSearchParams(document.location.search);
 let cocktail_type = params.get("cocktail_type") || "";
 let ingredient_preferences = params.get("ingredient_preferences") || "";
+let mocktail = (params.get("no_alcohol") || false) != false;
 
 window.onload = function() {
     if (cocktail_type != "") {
-    document.querySelector(".cocktail_type").value = cocktail_type;
-}
+        document.querySelector(".cocktail_type").value = cocktail_type;
+    }
 
-if (ingredient_preferences != "") {
+    if (ingredient_preferences != "") {
 
-    ingredient_preferences = ingredient_preferences.split(',');
-    inputTags = document.querySelector(".input-tags");
+        ingredient_preferences = ingredient_preferences.split(',');
+        inputTags = document.querySelector(".input-tags");
 
-    for (_ = 0; _ < ingredient_preferences.length; _++) {
-        ingredient = ingredient_preferences[_];
+        for (_ = 0; _ < ingredient_preferences.length; _++) {
+            ingredient = ingredient_preferences[_];
 
-        newTag = generateSearchTag(ingredient);
+            newTag = generateSearchTag(ingredient);
 
-        if (newTag !== null ) {
-            inputTags.parentElement.insertBefore(newTag, inputTags);
+            if (newTag !== null ) {
+                inputTags.parentElement.insertBefore(newTag, inputTags);
+            }
         }
     }
-}
+
+    if (mocktail) {
+        document.querySelector(".no_alcohol_option").checked = true;
+    }
 }
 
 function searchCocktails() {
@@ -40,6 +45,8 @@ function searchCocktails() {
     else { url.searchParams.delete("cocktail_type"); }
     if (ingredientList.length > 0) { url.searchParams.set("ingredient_preferences", ingredientList.join(",")); }
     else { url.searchParams.delete("ingredient_preferences"); }
+    if (document.querySelector(".no_alcohol_option").checked) { url.searchParams.set("no_alcohol", "true"); }
+    else { url.searchParams.delete("no_alcohol"); }
 
     window.location = url;
 }

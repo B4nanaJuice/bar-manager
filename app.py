@@ -71,6 +71,7 @@ def cocktails():
     # Get URL arguments
     cocktail_type: str = request.args.get("cocktail_type", default = "")
     ingredient_preferences: str = request.args.get("ingredient_preferences", default = "")
+    mocktail: bool = request.args.get("no_alcohol", default = False) != False
 
     # Get ingredients stock
     with open("data/stocks.json", encoding='utf-8') as f:
@@ -99,6 +100,9 @@ def cocktails():
         matches = [_ for _ in matches if _[1] >= 1]
 
         available_cocktails = [_[0] for _ in matches]
+
+    if mocktail:
+        available_cocktails = [_ for _ in available_cocktails if _["has_alcohol"] == False]
 
     return render_template("cocktails.html.jinja", page_title = "Cocktails", cocktails = available_cocktails, ingredients = available_ingredients)
 
