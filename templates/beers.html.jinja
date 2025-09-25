@@ -5,7 +5,7 @@
     <h4>{{ page_title }}</h4>
 
     <!-- Search engine -->
-    {{ beer_search(beer_types) }}
+    {{ beer_search(beer_types)|safe }}
 
     <!-- Show the data -->
     <ul>
