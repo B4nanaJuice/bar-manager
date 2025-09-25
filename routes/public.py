@@ -59,6 +59,9 @@ def beers():
     with open("data/stocks.json", encoding='utf-8') as f:
         stocks = json.loads(f.read())
 
+    # Get different beer types
+    beer_types = set([b["type"] for b in stocks["beers"]])
+
     # Filter data from beer type (if there is a specified type)
     if beer_type == "":
         beers = stocks["beers"]
@@ -66,7 +69,7 @@ def beers():
         beers: list = [b for b in stocks["beers"] if b["type"] == beer_type]
 
     # Render the template with the wanted beers
-    return render_template("beers.html.jinja", page_title = "Bières", beers = beers)
+    return render_template("beers.html.jinja", page_title = "Bières", beers = beers, beer_types = beer_types)
 
 @page.route("/others", methods = ["GET"])
 def others():

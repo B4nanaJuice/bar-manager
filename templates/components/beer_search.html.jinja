@@ -1,0 +1,16 @@
+{% macro beer_search(types) %}
+
+<div class="beer_search">
+    <select name="beer_type" class="beer_type">
+        <option value="" selected></option>
+        {% for type in types %}
+        <option value="{{ type }}">{{ type }}</option>
+        {% endfor %}
+    </select>
+
+    <button onclick="searchBeers()">Rechercher</button>
+</div>
+
+<script src="{{ url_for('static', filename = 'searchBeers.js') }}"></script>
+
+{% endmacro %}

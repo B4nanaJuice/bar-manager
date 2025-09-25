@@ -1,13 +1,11 @@
 {% extends "base.html" %}
+{% from "components/beer_search.html.jinja" import beer_search %}
 
 {% block content %}
     <h4>{{ page_title }}</h4>
 
     <!-- Search engine -->
-    <a href="/beers?beer_type=Blanche">Blanche</a>
-    <a href="/beers?beer_type=Blonde">Blonde</a>
-    <a href="/beers?beer_type=Brune">Brune</a>
-    <a href="/beers?beer_type=Ambree">Ambrée</a>
+    {{ beer_search(beer_types) }}
 
     <!-- Show the data -->
     <ul>
