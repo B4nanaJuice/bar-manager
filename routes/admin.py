@@ -39,4 +39,4 @@ def admin_panel():
 
     with open("data/ingredients.json", encoding='utf-8') as f:
         ingredients_list = json.loads(f.read())
-    return render_template("admin.html", beers = beers, ingredients = ingredients, ingredients_list = ingredients_list)
+    return render_template("admin.html", beers = beers, ingredients = ingredients, ingredients_list = sorted(ingredients_list))
