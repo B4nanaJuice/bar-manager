@@ -1,7 +1,6 @@
 from sqlalchemy import ForeignKey
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from data.database import db
-from data.models.cocktail import Cocktail
 
 class CocktailIngredient(db.Model):
     __tablename__ = 'cocktail_ingredients'
@@ -10,5 +9,6 @@ class CocktailIngredient(db.Model):
     cocktail_id: Mapped[int] = mapped_column(ForeignKey('cocktails.id'))
     name: Mapped[str]
     quantity: Mapped[float]
-    cocktail: Mapped["Cocktail"] = relationship(back_populates = 'ingredients')
-    
+
+    def __repr__(self):
+        return f"<CocktailIngredient {self.quantity}cl {self.name}>"
