@@ -10,4 +10,7 @@ class Cocktail(db.Model):
     name: Mapped[str]
     type: Mapped[str]
     has_alcohol: Mapped[bool]
-    ingredients: Mapped[List["CocktailIngredient"]] = relationship(back_populates = 'cocktail')
+    ingredients: Mapped[List["CocktailIngredient"]] = relationship()
+
+    def __repr__(self):
+        return f"<Cocktail {self.name}>"
