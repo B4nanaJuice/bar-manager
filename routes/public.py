@@ -68,6 +68,23 @@ def beers():
     else:
         beers: list = [b for b in stocks["beers"] if b["type"] == beer_type]
 
+    # Get beer types
+    # beer_types: List[str] = set(db.session.execute(db.select(BeerStock.type)).all())
+
+    # Get beers based of filter
+    # beers: List[BeerType] = db.session.execute(db.select(Beerstock).where(BeerStock.type == beer_type)).all()
+
+    # OR STATEMENT
+    # >>> from sqlalchemy import and_, or_
+    # >>> print(
+    # ...     select(Address.email_address).where(
+    # ...         and_(
+    # ...             or_(User.name == "squidward", User.name == "sandy"),
+    # ...             Address.user_id == User.id,
+    # ...         )
+    # ...     )
+    # ... )
+
     # Render the template with the wanted beers
     return render_template("beers.html.jinja", page_title = "Bières", beers = beers, beer_types = beer_types)
 
