@@ -1,6 +1,6 @@
 function generateSearchTag(tagName) {
     // Sanitize the tag name
-    if (tagName.match(/^[a-zA-Z0-9 '_"]*$/) === null) return null;
+    if (tagName.match(/^[a-zA-Z0-9 '_"çéèëêâä]*$/) === null) return null;
     if (tagName === null || tagName.match(/^ *$/) !== null) return null;
 
     // Create the tag 
