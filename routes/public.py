@@ -29,26 +29,6 @@ def cocktails():
     ingredient_preferences: str = request.args.get("ingredient_preferences", default = None)
     mocktail: bool = request.args.get("no_alcohol", default = None)
 
-    # Get available cocktails
-    # available_cocktails: list[dict] = get_available_cocktails(available_ingredients)
-
-    # if ingredient_preferences != "":
-    #     ingredient_preferences: list[str] = ingredient_preferences.split(",")
-    #     # Variable matches = list of tuples having : 
-    #     # - in first place the cocktail itself
-    #     # - in second place the number of matches between the ingredients of the cocktail and the ingredient_preferences
-    #     matches: list[tuple] = [
-    #             (_c, len([_ for _ in [i["name"] for i in _c["ingredients"]] if _.lower() in [i.lower() for i in ingredient_preferences]]))
-    #             for _c in available_cocktails
-    #         ]
-    #     # Sort the mateches variable by number of matches
-    #     matches = sorted(matches, key = lambda t: t[1], reverse = True)
-    #     # Take only entries with at least 1 match
-    #     matches = [_ for _ in matches if _[1] >= 1]
-
-    #     available_cocktails = [_[0] for _ in matches]
-
-
     # Get the available ingredients for the cocktails
     _query = db.select(IngredientStock.name)
     available_ingredients: List[str] = db.session.execute(_query).scalars()
@@ -61,18 +41,30 @@ def cocktails():
     )
     _query = db.select(Cocktail).where(~exists(_subquery))
 
-    # Add additional filters depending on the URL parameter
+    # Add additional filters depending on the URL parameters
     if cocktail_type:
         _query = _query.where(Cocktail.type == cocktail_type)
-
-    if ingredient_preferences:
-        ingredient_preferences: List[str] = ingredient_preferences.split(",")
 
     if mocktail:
         _query = _query.where(Cocktail.has_alcohol == False)
     
     # Query
     available_cocktails: List[Cocktail] = db.session.execute(_query).scalars()
+
+    # Make the last filter based on ingredient preferences
+    if ingredient_preferences:
+        ingredient_preferences: List[str] = ingredient_preferences.split(",")
+
+        # Compute the number of cocktail ingredients in the ingredient preferences
+        matches: List[tuple[Cocktail, int]] = [
+            (_c, len([_i for _i in [__i.name for __i in _c.ingredients] if _i in ingredient_preferences]))
+            for _c in available_cocktails
+        ]
+
+        # Sort the matches, take only the ones with at least 1 match and take the cocktails back
+        matches = sorted(matches, key = lambda _: _[1], reverse = True)
+        matches = [_ for _ in matches if _[1] >= 1]
+        available_cocktails = [_[0] for _ in matches]
 
     return render_template("cocktails.html.jinja", page_title = "Cocktails", cocktails = available_cocktails, ingredients = available_ingredients)
 
