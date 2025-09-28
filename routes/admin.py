@@ -1,4 +1,5 @@
 from flask import Blueprint, render_template, request, redirect, url_for
+from typing import List
 import json
 
 from data.database import db
@@ -9,9 +10,12 @@ page = Blueprint("admin", __name__, template_folder = "templates", static_folder
 @page.route("/admin", methods = ["GET", "POST"])
 def admin_panel():
 
-    with open("data/stocks.json", encoding='utf-8') as f:
-        stocks = json.loads(f.read())
-    beers, ingredients = stocks["beers"], stocks["ingredients"]
+    # Get the stocks from the database
+    beers: List[BeerStock] = db.session.execute(db.select(BeerStock)).scalars()
+
+    # with open("data/stocks.json", encoding='utf-8') as f:
+    #     stocks = json.loads(f.read())
+    # beers, ingredients = stocks["beers"], stocks["ingredients"]
 
     if request.method == "POST":
         # Update beers
@@ -40,9 +44,10 @@ def admin_panel():
         with open("data/stocks.json", mode = "w", encoding = 'utf-8') as f:
             f.write(json.dumps(stocks))
 
-    with open("data/ingredients.json", encoding='utf-8') as f:
-        ingredients_list = json.loads(f.read())
-    return render_template("admin.html", beers = beers, ingredients = ingredients, ingredients_list = sorted(ingredients_list))
+    # with open("data/ingredients.json", encoding='utf-8') as f:
+    #     ingredients_list = json.loads(f.read())
+    # return render_template("admin.html", beers = beers, ingredients = ingredients, ingredients_list = sorted(ingredients_list))
+    return render_template("admin.html", beers = beers)
 
 @page.route("/add-beer", methods = ["POST"])
 def add_beer():

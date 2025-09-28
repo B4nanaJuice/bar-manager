@@ -12,28 +12,7 @@
       <ul>
         {% for beer in beers %}
         <li>
-          <input
-            name="beerName"
-            type="text"
-            value="{{ beer.name }}"
-            placeholder="Nom"
-            required
-          />
-          <input
-            name="beerType"
-            type="text"
-            value="{{ beer.type }}"
-            placeholder="Type"
-            required
-          />
-          <input
-            name="beerDegree"
-            type="number"
-            value="{{ beer.degree }}"
-            placeholder="Degré"
-            required
-          />
-          <button type="button" onclick="this.parentElement.remove()">X</button>
+            {{ beer.name }} ({{ beer.type }}) {{ beer.degree }}°
         </li>
         {% endfor %}
         <button type="button" onclick="addBeerLine(this.parentElement, this)">
