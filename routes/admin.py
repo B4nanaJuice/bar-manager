@@ -1,5 +1,8 @@
-from flask import Blueprint, render_template, request
+from flask import Blueprint, render_template, request, redirect, url_for
 import json
+
+from data.database import db
+from data.models.beer_stock import BeerStock
 
 page = Blueprint("admin", __name__, template_folder = "templates", static_folder = "static")
 
@@ -40,3 +43,37 @@ def admin_panel():
     with open("data/ingredients.json", encoding='utf-8') as f:
         ingredients_list = json.loads(f.read())
     return render_template("admin.html", beers = beers, ingredients = ingredients, ingredients_list = sorted(ingredients_list))
+
+@page.route("/add-beer", methods = ["POST"])
+def add_beer():
+    # Get data form the form
+    beer_name: str = request.form.get("beerName") or None
+    beer_type: str = request.form.get("beerType") or None
+    beer_degree: float = request.form.get("beerDegree") or -1
+
+    if beer_name and beer_type and beer_degree >= 0:
+        # Add the beer to the database
+        beer_stock: BeerStock = BeerStock(name = beer_name, type = beer_type, degree = beer_degree)
+        try:
+            db.session.add(beer_stock)
+            db.session.commit()
+        except: 
+            print(f"An error occured while trying to add the beer {beer_stock} to the database.")
+    
+    return redirect(url_for("admin.admin_panel"))
+
+@page.route("/remove-beer/<int:beer_id>", methods = ["GET"])
+def remove_beer(beer_id: int):
+    # Get the beer from the id
+    _query = db.select(BeerStock).where(BeerStock.id == beer_id)
+    beer_stock: BeerStock = db.session.execute(_query).scalar_one_or_none()
+
+    # Remove the beer from the database
+    if beer_stock:
+        try:
+            db.session.remove(beer_stock)
+            db.session.commit()
+        except:
+            print(f"An error occured while trying to remove the beer {beer_stock} from the database.")
+
+    return redirect(url_for("admin.admin_panel"))
