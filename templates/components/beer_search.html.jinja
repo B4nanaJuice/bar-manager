@@ -8,9 +8,12 @@
         {% endfor %}
     </select>
 
+    <button onclick="resetFilters(this)">Effacer les filtres</button>
+
     <button onclick="searchBeers()">Rechercher</button>
 </div>
 
 <script src="{{ url_for('static', filename = 'searchBeers.js') }}"></script>
+<script src="{{ url_for('static', filename = 'resetFilters.js') }}"></script>
 
 {% endmacro %}

@@ -1,4 +1,4 @@
-inputTags = document.querySelector(".input-tags");
+inputTags = document.querySelector(".input_tags");
 
 inputTags.addEventListener("keypress", function(event) {
     if (event.key === "Enter") {
