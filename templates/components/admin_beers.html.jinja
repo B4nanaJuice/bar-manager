@@ -1,0 +1,19 @@
+{% macro admin_beers(beers) %}
+
+<ul>
+    {% for beer in beers %}
+    <li>
+        {{ beer.name }} ({{ beer.type }}) {{ beer.degree }}°
+        <a href="{{ url_for('admin.remove_beer', beer_id = beer.id) }}"><button>X</button></a>
+    </li>
+    {% endfor %}
+</ul>
+
+<form action="{{ url_for('admin.add_beer') }}" method="post">
+    <input type="text" name="beerName" required>
+    <input type="text" name="beerType" required>
+    <input type="number" name="beerDegree" required>
+    <input type="submit" value="Ajouter">
+</form>
+
+{% endmacro %}
