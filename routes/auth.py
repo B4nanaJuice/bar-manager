@@ -31,3 +31,10 @@ def login():
         return redirect(url_for('admin.admin_panel'))
 
     return render_template("login.html.jinja", page_title = "Authentification")
+
+@page.route("/logout", methods = ["GET"])
+def logout():
+    if 'user' in session:
+        session.pop('user')
+
+    return redirect(url_for('public.cocktails'))
