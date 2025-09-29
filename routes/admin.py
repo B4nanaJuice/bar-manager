@@ -4,57 +4,33 @@ import json
 
 from data.database import db
 from data.models.beer_stock import BeerStock
+from data.models.ingredient_stock import IngredientStock
+from data.models.cocktail_ingredient import CocktailIngredient
 
-page = Blueprint("admin", __name__, template_folder = "templates", static_folder = "static")
+page = Blueprint("admin", __name__, template_folder = "templates", static_folder = "static", url_prefix = "/admin")
 
-@page.route("/admin", methods = ["GET", "POST"])
+@page.before_request
+def check_admin():
+    pass
+
+@page.route("/", methods = ["GET", "POST"])
 def admin_panel():
-
     # Get the stocks from the database
     beers: List[BeerStock] = db.session.execute(db.select(BeerStock)).scalars()
+    ingredient_stock: List[str] = list(db.session.execute(db.select(IngredientStock.name)).scalars())
+    ingredients: List[str] = list(set(db.session.execute(db.select(CocktailIngredient.name)).scalars()))
 
-    # with open("data/stocks.json", encoding='utf-8') as f:
-    #     stocks = json.loads(f.read())
-    # beers, ingredients = stocks["beers"], stocks["ingredients"]
+    print([_ for _ in ingredient_stock])
+    print(ingredients)
 
-    if request.method == "POST":
-        # Update beers
-        beerNames = request.form.getlist("beerName")
-        beerTypes = request.form.getlist("beerType")
-        beerDegrees = request.form.getlist("beerDegree")
-
-        if len(beerNames) == len(beerTypes) and len(beerDegrees) == len(beerNames):
-            beers = []
-            for _ in range(len(beerNames)):
-                beers.append({
-                    "name": beerNames[_],
-                    "type": beerTypes[_],
-                    "degree": beerDegrees[_]
-                })
-
-        # Update ingredients
-        ingredients = [i for i in request.form if request.form.get(i) == 'on']
-
-        # Write data to file
-        stocks = {
-            "beers": beers,
-            "ingredients": ingredients
-        }
-
-        with open("data/stocks.json", mode = "w", encoding = 'utf-8') as f:
-            f.write(json.dumps(stocks))
-
-    # with open("data/ingredients.json", encoding='utf-8') as f:
-    #     ingredients_list = json.loads(f.read())
-    # return render_template("admin.html", beers = beers, ingredients = ingredients, ingredients_list = sorted(ingredients_list))
-    return render_template("admin.html", beers = beers)
+    return render_template("admin.html", beers = beers, ingredient_stock = ingredient_stock, ingredients = ingredients)
 
 @page.route("/add-beer", methods = ["POST"])
 def add_beer():
     # Get data form the form
     beer_name: str = request.form.get("beerName") or None
     beer_type: str = request.form.get("beerType") or None
-    beer_degree: float = request.form.get("beerDegree") or -1
+    beer_degree: float = int(request.form.get("beerDegree") or -1)
 
     if beer_name and beer_type and beer_degree >= 0:
         # Add the beer to the database
@@ -76,9 +52,34 @@ def remove_beer(beer_id: int):
     # Remove the beer from the database
     if beer_stock:
         try:
-            db.session.remove(beer_stock)
+            db.session.delete(beer_stock)
             db.session.commit()
         except:
             print(f"An error occured while trying to remove the beer {beer_stock} from the database.")
 
     return redirect(url_for("admin.admin_panel"))
+
+@page.route("/update-ingredients-stocks", methods = ["POST"])
+def update_ingredients_stock():
+    # Get all the ingredients and remove them
+    _query = db.select(IngredientStock)
+    ingredients_stock: List[IngredientStock] = db.session.execute(_query).scalars()
+    try:
+        for _ in ingredients_stock:
+            db.session.delete(_)
+        db.session.commit()
+    except:
+        print(f"An error occured while trying to delete an ingredient.")
+
+    # Get the new ingredients
+    new_stock: List[str] = [i for i in request.form if request.form.get(i) == 'on']
+
+    ingredients_stock = [IngredientStock(name = _) for _ in new_stock]
+    try:
+        db.session.add_all(ingredients_stock)
+        db.session.commit()
+    except:
+        print("An error occured while trying to add ingredients to the stock.")
+
+    # Redirect to admin panel
+    return redirect(url_for('admin.admin_panel'))

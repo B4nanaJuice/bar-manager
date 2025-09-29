@@ -7,35 +7,35 @@
   </head>
   <body>
     <h2>Paned admin</h2>
-    <form action="/admin" method="post">
       <h4>Bières</h4>
       <ul>
         {% for beer in beers %}
         <li>
             {{ beer.name }} ({{ beer.type }}) {{ beer.degree }}°
+            <a href="{{ url_for('admin.remove_beer', beer_id = beer.id) }}"><button>X</button></a>
         </li>
         {% endfor %}
-        <button type="button" onclick="addBeerLine(this.parentElement, this)">
-          +
-        </button>
       </ul>
+
+      <form action="{{ url_for('admin.add_beer') }}" method="post">
+        <input type="text" name="beerName" required>
+        <input type="text" name="beerType" required>
+        <input type="number" name="beerDegree" required>
+        <input type="submit" value="Ajouter">
+      </form>
 
       <h4>Ingrédients</h4>
-      <ul>
-        {% for i in ingredients_list %}
-        <li>
-          {% if i in ingredients %}
-          <input type="checkbox" name="{{ i }}" checked />
-          {% else %}
-          <input type="checkbox" name="{{ i }}" />
-          {% endif %}
-          <label for="{{ i }}">{{ i }}</label>
-        </li>
-        {% endfor %}
-      </ul>
-
-      <input type="submit" value="Update" />
-    </form>
+      <form action="{{ url_for('admin.update_ingredients_stock') }}" method="post">
+        <ul>
+          {% for ingredient in ingredients %}
+          <li>
+            <input type="checkbox" name="{{ ingredient }}" {% if ingredient in ingredient_stock %} checked {% endif %}>
+            <label for="{{ ingredient }}">{{ ingredient  }}</label>
+          </li>
+          {% endfor %}
+        </ul>
+        <input type="submit" value="Valider">
+      </form>
   </body>
 
   <script src="{{ url_for('static', filename = 'addBeerLine.js') }}"></script>
