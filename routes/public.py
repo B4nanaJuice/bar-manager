@@ -4,7 +4,6 @@ import re
 from typing import List
 from sqlalchemy.sql import exists
 
-from utils import get_available_cocktails
 from data.database import db
 from data.models.cocktail import Cocktail
 from data.models.beer_stock import BeerStock

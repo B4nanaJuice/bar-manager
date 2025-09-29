@@ -1,5 +1,6 @@
-from flask import Blueprint, render_template, request, redirect, url_for
+from flask import Blueprint, render_template, request, redirect, url_for, session
 from typing import List
+import os
 
 from data.database import db
 from data.models.beer_stock import BeerStock
@@ -10,7 +11,14 @@ page = Blueprint("admin", __name__, template_folder = "templates", static_folder
 
 @page.before_request
 def check_admin():
-    pass
+    # Check if there is a user in the session
+    # If not, make the user goes to auth page
+    if 'user' not in session:
+        return redirect(url_for('auth.login'))
+    
+    if session['user'] != os.getenv("ADMIN_USERNAME"):
+        session.pop('user')
+        return redirect(url_for('public.cocktails'))
 
 @page.route("/", methods = ["GET", "POST"])
 def admin_panel():
@@ -18,9 +26,6 @@ def admin_panel():
     beers: List[BeerStock] = db.session.execute(db.select(BeerStock)).scalars()
     ingredient_stock: List[str] = list(db.session.execute(db.select(IngredientStock.name)).scalars())
     ingredients: List[str] = list(set(db.session.execute(db.select(CocktailIngredient.name)).scalars()))
-
-    print([_ for _ in ingredient_stock])
-    print(ingredients)
 
     return render_template("admin.html", beers = beers, ingredient_stock = ingredient_stock, ingredients = ingredients, page_title = "Panel admin")
 
