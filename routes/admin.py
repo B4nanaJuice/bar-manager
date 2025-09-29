@@ -3,6 +3,7 @@ from typing import List
 import os
 
 from data.database import db
+from data.models.cocktail import Cocktail
 from data.models.beer_stock import BeerStock
 from data.models.ingredient_stock import IngredientStock
 from data.models.cocktail_ingredient import CocktailIngredient
@@ -87,3 +88,15 @@ def update_ingredients_stock():
 
     # Redirect to admin panel
     return redirect(url_for('admin.admin_panel'))
+
+@page.route("/populate", methods = ["GET"])
+def populate():
+    # This function is only here to add content to the database
+    # cocktails: List[Cocktail] = [
+        
+    # ]
+
+    # db.session.add_all(cocktails)
+    # db.session.commit()
+
+    return redirect(url_for("public.cocktails"))
