@@ -19,9 +19,10 @@ def home():
 @page.route("/cocktails", methods = ["GET"])
 def cocktails():
     # Get URL arguments
-    cocktail_type: str = request.args.get("cocktail_type", default = None)
-    ingredient_preferences: str = request.args.get("ingredient_preferences", default = None)
-    mocktail: bool = request.args.get("no_alcohol", default = None)
+    cocktail_type: str = request.args.get("cocktail_type", type = str, default = None)
+    ingredient_preferences: str = request.args.get("ingredient_preferences", type = str, default = None)
+    mocktail: bool = request.args.get("no_alcohol", type = bool, default = None)
+    cocktail_name: str = request.args.get("cocktail_name", type = str, default = None)
 
     # Get the available ingredients for the cocktails
     _query = db.select(IngredientStock.name)
@@ -41,6 +42,9 @@ def cocktails():
 
     if mocktail:
         _query = _query.where(Cocktail.has_alcohol == False)
+
+    if cocktail_name:
+        _query = _query.where(Cocktail.name.ilike(f"%{cocktail_name}%"))
     
     # Query
     available_cocktails: List[Cocktail] = db.session.execute(_query).scalars()

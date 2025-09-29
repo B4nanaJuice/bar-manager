@@ -2,7 +2,7 @@
 
 <div class="cocktail_search">
     <div class="ingredient_list">
-        <input list="ingredients" type="text" class="input-tags" placeholder="Ingrédient">
+        <input list="ingredients" type="text" class="input_tags" placeholder="Ingrédient">
         <datalist id="ingredients">
             {% for ingredient in ingredients %}
             <option value="{{ ingredient }}">
@@ -20,6 +20,8 @@
 
     <input type="checkbox" name="no_alcohol_option" id="no_alcohol_option" class="no_alcohol_option">
     <label for="no_alcohol_option">Sans alcool</label>
+
+    <input type="text" name="name" class="cocktail_name" placeholder="Nom">
 
     <button onclick="searchCocktails()">Rechercher</button>
 </div>
