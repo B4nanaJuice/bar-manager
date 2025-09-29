@@ -1,6 +1,5 @@
 from flask import Blueprint, render_template, request, redirect, url_for
 from typing import List
-import json
 
 from data.database import db
 from data.models.beer_stock import BeerStock

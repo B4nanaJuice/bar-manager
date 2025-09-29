@@ -17,11 +17,6 @@ page = Blueprint("public", __name__, template_folder = "templates", static_folde
 def home():
     return redirect(url_for("public.cocktails"))
 
-@page.route("/populate", methods = ["GET"])
-def populate():
-    print([_ for _ in db.session.execute(db.select(IngredientStock)).scalars()])
-    return redirect(url_for('public.cocktails'))
-
 @page.route("/cocktails", methods = ["GET"])
 def cocktails():
     # Get URL arguments
