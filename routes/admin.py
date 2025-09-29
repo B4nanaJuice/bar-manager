@@ -14,7 +14,7 @@ def check_admin():
     # Check if there is a user in the session
     # If not, make the user goes to auth page
     if 'user' not in session:
-        return redirect(url_for('auth.login'))
+        return redirect(url_for('auth.login', return_url = request.path))
     
     if session['user'] != os.getenv("ADMIN_USERNAME"):
         session.pop('user')

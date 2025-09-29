@@ -5,7 +5,11 @@ page = Blueprint("auth", __name__, template_folder = "templates", static_folder 
 
 @page.route("/login", methods = ["GET", "POST"])
 def login():
+    return_url: str = request.args.get("return_url") or None
+
     if 'user' in session and session['user'] == os.getenv("ADMIN_USERNAME"):
+        if return_url:
+            return redirect(return_url)
         return redirect(url_for('admin.admin_panel'))
     
     if request.method == "POST":
@@ -22,6 +26,8 @@ def login():
         
         session["user"] = os.getenv("ADMIN_USERNAME")
 
+        if return_url:
+            return redirect(return_url)
         return redirect(url_for('admin.admin_panel'))
 
     return render_template("login.html.jinja", page_title = "Authentification")
