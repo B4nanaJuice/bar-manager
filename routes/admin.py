@@ -28,7 +28,7 @@ def admin_panel():
     ingredient_stock: List[str] = list(db.session.execute(db.select(IngredientStock.name)).scalars())
     ingredients: List[str] = list(set(db.session.execute(db.select(CocktailIngredient.name)).scalars()))
 
-    return render_template("admin.html", beers = beers, ingredient_stock = ingredient_stock, ingredients = ingredients, page_title = "Panel admin")
+    return render_template("admin.html.jinja", beers = beers, ingredient_stock = ingredient_stock, ingredients = ingredients, page_title = "Panel admin")
 
 @page.route("/add-beer", methods = ["POST"])
 def add_beer():
