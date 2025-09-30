@@ -47,7 +47,7 @@ def cocktails():
         _query = _query.where(Cocktail.name.ilike(f"%{cocktail_name}%"))
     
     # Query
-    available_cocktails: List[Cocktail] = db.session.execute(_query).scalars()
+    available_cocktails: List[Cocktail] = db.paginate(_query)
 
     # Make the last filter based on ingredient preferences
     if ingredient_preferences:
@@ -56,15 +56,20 @@ def cocktails():
         # Compute the number of cocktail ingredients in the ingredient preferences
         matches: List[tuple[Cocktail, int]] = [
             (_c, len([_i for _i in [__i.name for __i in _c.ingredients] if _i in ingredient_preferences]))
-            for _c in available_cocktails
+            for _c in available_cocktails.items
         ]
 
         # Sort the matches, take only the ones with at least 1 match and take the cocktails back
         matches = sorted(matches, key = lambda _: _[1], reverse = True)
         matches = [_ for _ in matches if _[1] >= 1]
-        available_cocktails = [_[0] for _ in matches]
+        available_cocktails.items = [_[0] for _ in matches]
 
-    return render_template("cocktails.html.jinja", page_title = "Cocktails", cocktails = available_cocktails, ingredients = available_ingredients)
+    # Handle url arguments
+    url_args = dict(request.args)
+    if url_args.get("page"):
+        url_args.pop("page")
+
+    return render_template("cocktails.html.jinja", page_title = "Cocktails", cocktails = available_cocktails, ingredients = available_ingredients, endpoint = request.endpoint, url_args = url_args)
 
 @page.route("/beers", methods = ["GET"])
 def beers():

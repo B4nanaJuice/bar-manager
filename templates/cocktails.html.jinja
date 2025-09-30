@@ -1,6 +1,7 @@
 {% extends "base.html" %}
 {% from "components/cocktail_card.html.jinja" import cocktail_card %}
 {% from "components/cocktail_search.html.jinja" import cocktail_search %}
+{% from "components/pagination.html.jinja" import pagination %}
 
 {% block content %}
     <h4>{{ page_title }}</h4>
@@ -16,4 +17,6 @@
         </li>
         {% endfor %}
     </ul>
+    <!-- Pagination -->
+    {{ pagination(cocktails, endpoint, url_args) }}
 {% endblock %}
