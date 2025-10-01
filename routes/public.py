@@ -47,7 +47,7 @@ def cocktails():
         _query = _query.where(Cocktail.name.ilike(f"%{cocktail_name}%"))
     
     # Query
-    available_cocktails: List[Cocktail] = db.paginate(_query)
+    available_cocktails: List[Cocktail] = db.paginate(_query.order_by(Cocktail.name))
 
     # Make the last filter based on ingredient preferences
     if ingredient_preferences:
