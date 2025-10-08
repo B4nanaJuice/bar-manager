@@ -1,0 +1,8 @@
+.footer {
+    width: 100%;
+    margin: auto;
+    background: var(--primary-dark);
+    color: var(--light);
+    margin-top: var(--default-spacing);
+    padding: var(--default-spacing);
+}
