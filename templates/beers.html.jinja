@@ -8,10 +8,12 @@
     {{ beer_search(beer_types)|safe }}
 
     <!-- Show the data -->
-    <ul>
+    <ul class="item-list">
         {% for beer in beers %}
         <li>
-            {{ beer.name }} ({{ beer.type }}) {{ beer.degree }}°
+            <div class="beer-card">
+                {{ beer.name }} ({{ beer.type }}) {{ beer.degree }}°
+            </div>
         </li>
         {% endfor %}
     </ul>
