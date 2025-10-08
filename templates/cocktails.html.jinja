@@ -3,6 +3,11 @@
 {% from "components/cocktail_search.html.jinja" import cocktail_search %}
 {% from "components/pagination.html.jinja" import pagination %}
 
+{% block header %}
+    {{ super() }}
+    <link rel="stylesheet" href="{{ url_for('static', filename = 'css/pagination.css') }}">
+{% endblock %}
+
 {% block content %}
     <h4>{{ page_title }}</h4>
 
@@ -10,7 +15,6 @@
     {{ cocktail_search(ingredients)|safe }}
 
     <!-- Show the data -->
-    <ul>
     <ul class="item-list">
         {% for cocktail in cocktails %}
         <li>
