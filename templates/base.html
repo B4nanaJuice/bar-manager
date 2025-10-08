@@ -9,16 +9,24 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{ page_title }} | Le bar de la Tanière</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename = 'css/base.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename = 'css/navbar.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename = 'css/footer.css') }}">
     {% endblock %}
 </head>
 
 <body>
-    {{ navbar()|safe }}
+    <div class="header">
+        <h2>Le bar de la Tanière</h2>
+    </div>
 
-    <h2>Le bar de la Tanière</h2>
+    {{ navbar(page_title)|safe }}
 
-    {% block content %}
-    {% endblock %}
+    <div class="content">
+        {% block content %}
+        {% endblock %}
+    </div>
+    
 
     {{ footer()|safe }}
 
