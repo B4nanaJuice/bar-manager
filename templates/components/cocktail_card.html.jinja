@@ -1,14 +1,14 @@
 {% macro cocktail_card(cocktail) %}
 
-<div class="cocktail_card">
-    {{ cocktail.name }}
+<div class="cocktail-card">
+    <p class="main"> {{ cocktail.name }} <span class="description small"> ({{ cocktail.type }}) </span> </p>
     
-    {% for ingredient in cocktail.ingredients %}
-    {{ ingredient.name }}
-    {{ "-" if not loop.last else "" }}
-    {% endfor %}
-
-    ({{ cocktail.type }})
+    <p class="description small">
+        {% for ingredient in cocktail.ingredients %}
+        {{ ingredient.name }}
+        {{ "-" if not loop.last else "" }}
+        {% endfor %}
+    </p>
 </div>
 
 {% endmacro %}
