@@ -11,12 +11,14 @@
 
     <!-- Show the data -->
     <ul>
+    <ul class="item-list">
         {% for cocktail in cocktails %}
         <li>
             {{ cocktail_card(cocktail)|safe }}
         </li>
         {% endfor %}
     </ul>
+    
     <!-- Pagination -->
     {{ pagination(cocktails, endpoint, url_args) }}
 {% endblock %}
