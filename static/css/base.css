@@ -1,0 +1,68 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins&display=swap');
+
+:root {
+    --primary: #31572c;
+    --primary-light: hsl(from var(--primary) h s calc(l + 20) / alpha);
+    --primary-dark: hsl(from var(--primary) h s calc(l - 20) / alpha);
+
+    --light: hsl(from white h s calc(l - 3) / alpha);
+
+    --default-spacing: 50px;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+
+    font-family: "Poppins", sans-serif;
+    font-weight: 400;
+    font-style: normal;
+}
+
+body {
+    background: hsl(from var(--primary) calc(180 - h) s calc(100 - l) / alpha);
+}
+
+ul {
+    list-style: none;
+}
+
+a { text-decoration: none; }
+.small { font-size: small; }
+.description { color: rgba(0, 0, 0, 0.7); }
+
+/* HEADER */
+
+.header {
+    width: 100%;
+    padding: var(--default-spacing) 0px var(--default-spacing) 0px;
+    margin: 0 0 var(--default-spacing) 0;
+    background: var(--primary);
+}
+
+.header h2 {
+    width: 100%;
+    text-align: center;
+    color: white;
+}
+
+/* CONTENT */
+
+.content {
+    width: 40%;
+    margin: auto;
+    padding: 20px;
+    border-radius: 10px;
+    background: white;
+}
+
+.item-list li {
+    padding: 10px;
+    margin: 1px;
+    background: white;
+}
+
+.item-list li {
+    border-bottom: solid hsl(from var(--primary) calc(180 - h) s calc(100 - l) / alpha) 1px;
+}
