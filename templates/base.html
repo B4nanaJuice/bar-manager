@@ -26,12 +26,22 @@
         {% block content %}
         {% endblock %}
     </div>
-    
 
     {{ footer()|safe }}
 
     <script src="{{ url_for('static', filename = 'utils.js') }}"></script>
 
 </body>
+
+<script>
+    window.onload = function() {
+        footer = document.querySelector(".footer");
+        footerHeight = footer.offsetHeight;
+        body = document.querySelector("body");
+        style = window.getComputedStyle(document.body);
+        defaultSpace = parseInt(style.getPropertyValue('--default-spacing').match(/\d+/)[0]);
+        body.style.paddingBottom = `${footerHeight + defaultSpace}px`;
+    }
+</script>
 
 </html>

@@ -22,15 +22,25 @@
 
 body {
     background: hsl(from var(--primary) calc(180 - h) s calc(100 - l) / alpha);
+    min-height: 100vh;
+    position: relative;
 }
 
 ul {
     list-style: none;
 }
 
-a { text-decoration: none; }
-.small { font-size: small; }
-.description { color: rgba(0, 0, 0, 0.7); }
+a {
+    text-decoration: none;
+}
+
+.small {
+    font-size: small;
+}
+
+.description {
+    color: rgba(0, 0, 0, 0.7);
+}
 
 /* HEADER */
 

@@ -3,6 +3,8 @@
     margin: auto;
     background: var(--primary-dark);
     color: var(--light);
-    margin-top: var(--default-spacing);
     padding: var(--default-spacing);
+
+    position: absolute;
+    bottom: 0;
 }

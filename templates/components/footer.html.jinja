@@ -1,7 +1,14 @@
 {% macro footer() %}
 
 <div class="footer">
-    A footer here.
+    <div class="sitemap">
+        <h4>Plan du site</h4>
+        <ul>
+        {% for endpoint in ["a", "b", "c"] %}
+            <li><a href="">{{ endpoint }}</a></li>
+        {% endfor %}
+        </ul>
+    </div>
 </div>
 
 {% endmacro %}
