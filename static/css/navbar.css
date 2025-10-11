@@ -28,3 +28,27 @@
 .navbar a:last-child {
     border-radius: 0px 5px 5px 0px;
 }
+
+@media screen and (min-width: 1920px) {
+    .navbar {
+        width: 30%;
+    }
+}
+
+@media screen and (min-width: 1040px) and (max-width: 1919px) {
+    .navbar {
+        width: 40%;
+    }
+}
+
+@media screen and (min-width: 810px) and (max-width: 1039px) {
+    .navbar {
+        width: 60%;
+    }
+}
+
+@media screen and (max-width: 809px) {
+    .navbar {
+        width: 90%;
+    }
+}

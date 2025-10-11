@@ -11,10 +11,36 @@
     bottom: 0;
 }
 
-.footer .sitemap {
-    width: 20%;
+.footer * {
+    margin: auto;
+    text-align: center;
 }
 
-.footer .others {
-    width: 40%;
+.footer .sitemap ul {
+    width: 100%;
+}
+
+@media screen and (min-width: 810px) {
+    .footer > div {
+        width: 40%;
+    }
+}
+
+@media screen and (max-width: 1039px) {
+    .footer {
+        flex-direction: column;
+    }
+
+    .footer > div {
+        width: 90%;
+    }
+
+    .footer .sitemap {
+        margin-bottom: var(--default-spacing);
+    }
+
+    .footer .sitemap ul {
+        display: flex;
+        justify-content: space-around;
+    }
 }

@@ -78,3 +78,27 @@ a {
 .item-list li {
     border-bottom: solid var(--primary-lighter) 1px;
 }
+
+@media screen and (min-width: 1920px) {
+    .content {
+        width: 40%;
+    }
+}
+
+@media screen and (min-width: 1040px) and (max-width: 1919px) {
+    .content {
+        width: 60%;
+    }
+}
+
+@media screen and (min-width: 810px) and (max-width: 1039px) {
+    .content {
+        width: 80%;
+    }
+}
+
+@media screen and (max-width: 809px) {
+    .content {
+        width: 90%;
+    }
+}
