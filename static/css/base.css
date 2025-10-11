@@ -41,7 +41,7 @@ a {
 }
 
 .description {
-    color: rgba(0, 0, 0, 0.7);
+    opacity: 0.5;
 }
 
 /* HEADER */

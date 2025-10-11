@@ -4,7 +4,17 @@
     background: var(--primary-dark);
     color: var(--light);
     padding: var(--default-spacing);
+    display: flex;
+    justify-content: space-around;
 
     position: absolute;
     bottom: 0;
+}
+
+.footer .sitemap {
+    width: 20%;
+}
+
+.footer .others {
+    width: 40%;
 }
