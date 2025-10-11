@@ -4,6 +4,7 @@
     --primary: #31572c;
     --primary-light: hsl(from var(--primary) h s calc(l + 20) / alpha);
     --primary-dark: hsl(from var(--primary) h s calc(l - 20) / alpha);
+    --primary-lighter: hsl(from var(--primary) calc(180 - h) s calc(100 - l) / alpha);
 
     --light: hsl(from white h s calc(l - 3) / alpha);
 
@@ -21,7 +22,7 @@
 }
 
 body {
-    background: hsl(from var(--primary) calc(180 - h) s calc(100 - l) / alpha);
+    background: var(--primary-lighter);
     min-height: 100vh;
     position: relative;
 }
@@ -32,6 +33,7 @@ ul {
 
 a {
     text-decoration: none;
+    color: var(--primary-lighter);
 }
 
 .small {
@@ -74,5 +76,5 @@ a {
 }
 
 .item-list li {
-    border-bottom: solid hsl(from var(--primary) calc(180 - h) s calc(100 - l) / alpha) 1px;
+    border-bottom: solid var(--primary-lighter) 1px;
 }
