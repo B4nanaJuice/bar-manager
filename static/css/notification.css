@@ -1,0 +1,82 @@
+.notifications {
+    position: fixed;
+    margin-left: 50%;
+    transform: translateX(-50%);
+}
+
+.notifications .notification {
+    padding: 10px;
+    border-radius: 10px;
+    margin: 10px;
+}
+
+.notification div {
+    display: flex;
+}
+
+.close {
+    width: 16px;
+    height: 16px;
+    opacity: 0.3;
+}
+
+.close:hover {
+    opacity: 1;
+    cursor: pointer;
+}
+
+.close:before,
+.close:after {
+    content: ' ';
+    height: 17px;
+    width: 3px;
+    background: hsl(0, 0%, 20%);
+    position: absolute;
+    right: 27px;
+    transform: translateX(-100%);
+}
+
+.close:before {
+    transform: rotate(45deg);
+}
+
+.close:after {
+    transform: rotate(-45deg);
+}
+
+.error {
+    background: var(--error);
+}
+
+.success {
+    background: var(--success);
+    color: var(--light);
+}
+
+.information {
+    background: var(--information);
+}
+
+@media screen and (min-width: 1920px) {
+    .notifications {
+        width: 30%;
+    }
+}
+
+@media screen and (min-width: 1040px) and (max-width: 1919px) {
+    .notifications {
+        width: 40%;
+    }
+}
+
+@media screen and (min-width: 810px) and (max-width: 1039px) {
+    .notifications {
+        width: 70%;
+    }
+}
+
+@media screen and (max-width: 809px) {
+    .notifications {
+        width: 90%;
+    }
+}
