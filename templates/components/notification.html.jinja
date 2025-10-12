@@ -1,0 +1,11 @@
+{% macro notification(type, message) %}
+
+<div class="notification {{ type }}">
+    <div>
+        <h3>{{ type|capitalize() }}</h3>
+        <a class="close" onclick="this.parentElement.parentElement.remove()"></a>
+    </div>
+    <p>{{ message }}</p>
+</div>
+
+{% endmacro %}

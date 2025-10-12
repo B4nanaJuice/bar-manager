@@ -1,5 +1,6 @@
 {% from "components/navbar.html.jinja" import navbar %}
 {% from "components/footer.html.jinja" import footer %}
+{% from "components/notification.html.jinja" import notification %}
 
 <!DOCTYPE html>
 <html lang="fr">
@@ -12,10 +13,22 @@
     <link rel="stylesheet" href="{{ url_for('static', filename = 'css/base.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename = 'css/navbar.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename = 'css/footer.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename = 'css/notification.css') }}">
     {% endblock %}
 </head>
 
 <body>
+    <!-- Show notifications -->
+    {% with messages = get_flashed_messages(with_categories = true) %}
+        {% if messages %}
+            <div class="notifications">
+            {% for category, message in messages %}
+                {{ notification(category, message)|safe() }}
+            {% endfor %}
+            </div>
+        {% endif %}
+    {% endwith %}
+
     <div class="header">
         <h2>Le bar de la Tanière</h2>
     </div>

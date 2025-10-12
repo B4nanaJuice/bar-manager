@@ -8,6 +8,10 @@
 
     --light: hsl(from white h s calc(l - 3) / alpha);
 
+    --error: rgb(220, 53, 69);
+    --success: rgb(25, 135, 84);
+    --information: rgb(13, 202, 240);
+
     --default-spacing: 50px;
 }
 
@@ -41,7 +45,11 @@ a {
 }
 
 .description {
-    opacity: 0.5;
+    color: rgba(0, 0, 0, 0.5);
+}
+
+.description-light {
+    color: rgba(255, 255, 255, 0.5);
 }
 
 /* HEADER */
