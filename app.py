@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask, render_template
 
 from routes import public, admin, auth
 from data.database import init_database
@@ -16,3 +16,8 @@ init_database(app = app)
 app.register_blueprint(public.page)
 app.register_blueprint(admin.page)
 app.register_blueprint(auth.page)
+
+# Add app error handler
+@app.errorhandler(404)
+def page_not_found(error):
+    return render_template('errors/404.html', page_title = "Page introuvable")
