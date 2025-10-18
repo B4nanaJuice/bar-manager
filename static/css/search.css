@@ -1,0 +1,17 @@
+.search {
+    margin: 10px;
+    display: flex;
+    flex-direction: column;
+}
+
+.search .row {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    margin: 10px 0;
+}
+
+.search .row .column {
+    display: flex;
+    flex-direction: column;
+}
