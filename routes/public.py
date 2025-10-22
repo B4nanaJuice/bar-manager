@@ -20,7 +20,7 @@ def home():
 def cocktails():
     # Get URL arguments
     cocktail_type: str = request.args.get("cocktail_type", type = str, default = None)
-    ingredient_preferences: str = request.args.get("ingredient_preferences", type = str, default = None)
+    # ingredient_preferences: str = request.args.get("ingredient_preferences", type = str, default = None)
     mocktail: bool = request.args.get("no_alcohol", type = bool, default = None)
     cocktail_name: str = request.args.get("cocktail_name", type = str, default = None)
 
@@ -49,20 +49,23 @@ def cocktails():
     # Query
     available_cocktails: List[Cocktail] = db.paginate(_query.order_by(Cocktail.name))
 
+    # Paginate and after that : sort with ingredients
+    # So some cocktails can go to second page because initially they were there
     # Make the last filter based on ingredient preferences
-    if ingredient_preferences:
-        ingredient_preferences: List[str] = ingredient_preferences.split(",")
+    # Temp removed
+    # if ingredient_preferences:
+    #     ingredient_preferences: List[str] = ingredient_preferences.split(",")
 
-        # Compute the number of cocktail ingredients in the ingredient preferences
-        matches: List[tuple[Cocktail, int]] = [
-            (_c, len([_i for _i in [__i.name for __i in _c.ingredients] if _i in ingredient_preferences]))
-            for _c in available_cocktails.items
-        ]
+    #     # Compute the number of cocktail ingredients in the ingredient preferences
+    #     matches: List[tuple[Cocktail, int]] = [
+    #         (_c, len([_i for _i in [__i.name for __i in _c.ingredients] if _i in ingredient_preferences]))
+    #         for _c in available_cocktails.items
+    #     ]
 
-        # Sort the matches, take only the ones with at least 1 match and take the cocktails back
-        matches = sorted(matches, key = lambda _: _[1], reverse = True)
-        matches = [_ for _ in matches if _[1] >= 1]
-        available_cocktails.items = [_[0] for _ in matches]
+    #     # Sort the matches, take only the ones with at least 1 match and take the cocktails back
+    #     matches = sorted(matches, key = lambda _: _[1], reverse = True)
+    #     matches = [_ for _ in matches if _[1] >= 1]
+    #     available_cocktails.items = [_[0] for _ in matches]
 
     # Handle url arguments
     url_args = dict(request.args)

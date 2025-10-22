@@ -1,10 +1,11 @@
 function resetFilters(button) {
-    searchEngine = button.parentElement;
+    searchEngine = button.parentElement.parentElement;
+    console.log(searchEngine)
 
     // Remove tags from box
-    searchEngine.querySelectorAll(".search_tag").forEach(tag => {
-        tag.remove();        
-    });
+    // searchEngine.querySelectorAll(".search_tag").forEach(tag => {
+    //     tag.remove();        
+    // });
 
     // Remove the value of the select
     searchEngine.querySelectorAll("select").forEach(select => {
