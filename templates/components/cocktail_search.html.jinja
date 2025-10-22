@@ -8,28 +8,12 @@
 
     <h4>Filtres</h4>
 
-    <div class="row">
-        <div class="column">
-            <label for="name">Nom :</label>
-            <input type="text" name="name" id="name" class="cocktail_name" placeholder="Nom">
-        </div>
-
-        <div class="column">
-            <label for="cocktail_type">Type :</label>
-            <select name="cocktail_type" class="cocktail_type" id="cocktail_type">
-                <option value="" selected>Sélectionner un type</option>
-                <option value="long">Long</option>
-                <option value="short">Short</option>
-                <option value="shot">Shot</option>
-            </select>
-        </div>
-    </div>
-
-    <div class="row">
-        <div class="column">
-            <label for="ingredient_list">Ingrédients préférés :</label>
-            <div class="ingredient_list tags_list">
-                <input list="ingredients" type="text" class="input_tags" placeholder="Ingrédient">
+    <div class="ingredients_search">
+        <i class="fa-solid fa-magnifying-glass description"></i>
+        <div>
+            {# <label for="ingredient_list">Recherche par ingrédients :</label> #}
+            <div class="ingredient_list tags_list row">
+                <input list="ingredients" type="text" class="input_tags" placeholder="Ingrédients">
                 <datalist id="ingredients">
                     {% for ingredient in ingredients %}
                     <option value="{{ ingredient }}">
@@ -38,14 +22,29 @@
                 <button onclick="triggerNewTag()">+</button>
             </div>
         </div>
-
-        <div class="row">
-            <input type="checkbox" name="no_alcohol_option" id="no_alcohol_option" class="no_alcohol_option">
-            <label for="no_alcohol_option">Sans alcool</label>
-        </div>
     </div>
 
-    <div class="row">
+    <div class="cocktail_name_search">
+        <label for="name">Nom :</label>
+        <input type="text" name="name" id="name" class="cocktail_name" placeholder="Nom">
+    </div>
+
+    <div class="cocktail_type_search">
+        <label for="cocktail_type">Type :</label>
+        <select name="cocktail_type" class="cocktail_type" id="cocktail_type">
+            <option value="" selected>Sélectionner un type</option>
+            <option value="long">Long</option>
+            <option value="short">Short</option>
+            <option value="shot">Shot</option>
+        </select>
+    </div>
+
+    <div class="cocktail_alcohol_search">
+        <input type="checkbox" name="no_alcohol_option" id="no_alcohol_option" class="no_alcohol_option">
+        <label for="no_alcohol_option">Sans alcool</label>
+    </div>
+
+    <div class="cocktail_buttons_search">
         <button onclick="resetFilters(this)">Effacer les filtres</button>
         <button onclick="searchCocktails()">Rechercher</button>
     </div>

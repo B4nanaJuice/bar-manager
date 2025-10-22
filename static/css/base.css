@@ -7,6 +7,9 @@
     --primary-lighter: hsl(from var(--primary) calc(180 - h) s calc(100 - l) / alpha);
 
     --light: hsl(from white h s calc(l - 3) / alpha);
+    --light-grey: hsl(from var(--light) h s calc(l - 15) / alpha);
+    --grey: hsl(from var(--light-grey) h s calc(l - 15) / alpha);
+    --dark-grey: hsl(from var(--grey) h s calc(l - 15) / alpha);
 
     --error: rgb(220, 53, 69);
     --success: rgb(25, 135, 84);
