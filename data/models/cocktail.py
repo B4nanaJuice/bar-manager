@@ -10,6 +10,7 @@ class Cocktail(db.Model):
     name: Mapped[str] = mapped_column(unique = True)
     type: Mapped[str]
     has_alcohol: Mapped[bool]
+    glass_type: Mapped[str] = mapped_column(default = "martini")
     ingredients: Mapped[List["CocktailIngredient"]] = relationship()
 
     def __repr__(self):
