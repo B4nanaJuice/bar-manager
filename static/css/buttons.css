@@ -1,0 +1,59 @@
+button, .button {
+    min-height: max(48px, var(--text-small));
+    padding: calc(var(--text-small) / 2) var(--text-small);
+    border-radius: 8px;
+    transition: transform .2s ease, box-shadow .3s ease;
+}
+
+button:hover {
+    cursor: pointer;
+    transform: scale(1.05);
+    box-shadow: rgba(0, 0, 0, .3) 4px 4px 4px;
+}
+
+.buttons {
+    display: flex;
+    width: 100%;
+    margin: var(--text-big) 0;
+    justify-content: space-around;
+}
+
+.buttons .light, .buttons .dark {
+    display: flex;
+    justify-content: space-around;
+}
+
+.button-secondary, .button-secondary-dark  {
+    border: solid var(--secondary) 2px;
+    background: var(--secondary);
+}
+
+.button-primary {
+    background: var(--dark);
+    border: solid var(--dark) 2px;
+}
+
+.button-primary-dark {
+    background: var(--light);
+    border: solid var(--light) 2px;
+}
+
+.button-full.button-primary, .button-outline.button-primary-dark, .button-outline.button-secondary-dark {
+    color: var(--light);
+}
+
+.button-secondary, .button-full.button-secondary-dark {
+    color: black;
+}
+
+.button-outline.button-primary, .button-full.button-primary-dark {
+    color: var(--dark);
+}
+
+.button-outline {
+    background: none;
+}
+
+.buttons button {
+    width: 40%;
+}
