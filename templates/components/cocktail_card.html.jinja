@@ -1,16 +1,40 @@
 {% macro cocktail_card(cocktail) %}
 
 <div class="cocktail-card">
-    <p class="main"> {{ cocktail.name }} <span class="description small"> ({{ cocktail.type }}) </span> </p>
+    <p> {{ cocktail.name }} <span class="small"> ({{ cocktail.type }}) </span> </p>
     
-    <p class="description small">
+    <p class="small">
         {% for ingredient in cocktail.ingredients %}
         {{ ingredient.name }}
         {{ "-" if not loop.last else "" }}
         {% endfor %}
     </p>
 
-    {{ cocktail.glass_type }}
+    {% if cocktail.glass_type == "old_fashioned" %}
+        <svg width="50" height="50" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+            <path d="M20 20 V 80 H 80 V 70 H 20 H 80 V 30 H 20 H 80 V 20"
+                    style="fill: none; stroke: var(--dark); stroke-width: 3px; stroke-linejoin: round;" />
+
+            <path d="M20 55 l 5 -5 M25 70 l 20 -20 M 45 70 l 20 -20 M 65 70 l 15 -15"
+                    style="fill: none; stroke: var(--dark); stroke-width: 1.5px;"/>
+
+            <path d="M80 55 l -5 -5 M75 70 l -20 -20 M 55 70 l -20 -20 M 35 70 l -15 -15"
+                    style="fill: none; stroke: var(--dark); stroke-width: 1.5px;"/>
+        </svg>
+    {% elif cocktail.glass_type == "tumbler" %}
+        <svg width="50" height="50" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+            <path d="M30 10 V 90 H 70 V 80 H 30 H 70 V 20 H 30 H 70 V 10"
+                    style="fill: none; stroke: var(--dark); stroke-width: 3px;" />
+
+            <path d="M67 80 l -42 -80"
+                    style="fill: none; stroke: var(--dark); stroke-width: 5px;" />
+        </svg>
+    {% elif cocktail.glass_type == "martini" %}
+        <svg width="50" height="50" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+            <path d="M20 10 l 5 5 h 50 h -50 l 25 25 l 30 -30 l -30 30 V 85 l -20 5 h 40 l -20 -5"
+                    style="fill: none; stroke: var(--dark); stroke-width: 3px;" />
+        </svg>
+    {% endif %}
 </div>
 
 {% endmacro %}
