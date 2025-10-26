@@ -13,22 +13,21 @@
 }
 
 * {
-    margin: 0;
     padding: 0;
+    margin: 0;
     box-sizing: border-box;
 
     font-family: "Poppins", sans-serif;
-    font-weight: 400;
+    font-weight: 500;
     font-style: normal;
-
-    /* For css "debugging" */
-    /* border: black solid 1px; */
 }
 
-body {
-    background: var(--primary-lighter);
-    min-height: 100vh;
-    position: relative;
+h2 { 
+    font-size: var(--text-big);
+}
+
+p, label { 
+    font-size: var(--text-normal);
 }
 
 ul {
@@ -37,84 +36,50 @@ ul {
 
 a {
     text-decoration: none;
-    color: var(--primary-lighter);
 }
-
-h1 {
-    width: 100%;
-    text-align: center;
-    font-size: 15rem;
-    font-weight: bolder;
-    color: rgba(0, 0, 0, 0.2);
-}
-
-.small {
-    font-size: small;
-}
-
-.description {
-    color: rgba(0, 0, 0, 0.5);
-}
-
-.description-light {
-    color: rgba(255, 255, 255, 0.5);
-}
-
-/* HEADER */
 
 .header {
-    width: 100%;
-    padding: var(--default-spacing) 0px var(--default-spacing) 0px;
-    margin: 0 0 var(--default-spacing) 0;
-    background: var(--primary);
+    background-color: var(--primary);
+    max-height: 25vh;
 }
 
 .header h2 {
     width: 100%;
     text-align: center;
-    color: white;
+    font-size: calc(var(--text-big) * 10);
+    /* transform: translateY(35%); */
+    color: rgba(255, 255, 255, .2);
 }
-
-/* CONTENT */
 
 .content {
-    width: 40%;
+    width: 50vw;
     margin: auto;
-    padding: 20px;
-    border-radius: 10px;
-    background: white;
+    border-radius: var(--text-small);
+    background: rgba(0, 0, 0, .1);
+
+    border-radius: var(--text-small);
+    padding: var(--text-big);
 }
 
-.item-list li {
-    padding: 10px;
-    margin: 1px;
-    background: white;
+.small {
+    font-size: var(--text-small);
 }
 
-.item-list li {
-    border-bottom: solid var(--primary-lighter) 1px;
+.dark, .light {
+    padding: var(--text-big);
 }
 
-@media screen and (min-width: 1920px) {
-    .content {
-        width: 40%;
-    }
+.dark {
+    background: var(--dark);
+    color: var(--light);
 }
 
-@media screen and (min-width: 1040px) and (max-width: 1919px) {
-    .content {
-        width: 60%;
-    }
+.light {
+    background: var(--light);
+    color: var(--dark);
 }
 
-@media screen and (min-width: 810px) and (max-width: 1039px) {
-    .content {
-        width: 80%;
-    }
-}
-
-@media screen and (max-width: 809px) {
-    .content {
-        width: 90%;
-    }
+.button-list {
+    display: flex;
+    flex-direction: row;
 }
