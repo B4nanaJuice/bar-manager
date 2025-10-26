@@ -5,13 +5,10 @@
 
 {% block header %}
     {{ super() }}
-    <link rel="stylesheet" href="{{ url_for('static', filename = 'css/pagination.css') }}">
-    <link rel="stylesheet" href="{{ url_for('static', filename = 'css/search.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename = 'css/pages/cocktails.css') }}">
 {% endblock %}
 
 {% block content %}
-    <h4>{{ page_title }}</h4>
-
     <!-- Search engine -->
     {{ cocktail_search(ingredients)|safe }}
 
