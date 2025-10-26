@@ -1,15 +1,12 @@
 {% macro navbar(page_title) %}
 
-<div class="navbar">
-    <a href="{{ url_for('public.cocktails') }}" 
-        {% if page_title == 'Cocktails' %}class="selected"{% endif %} 
-        >Cocktails</a>
-    <a href="{{ url_for('public.beers') }}" 
-        {% if page_title == 'Bières' %}class="selected"{% endif %}
-    >Bières</a>
-    <a href="{{ url_for('public.others') }}" 
-        {% if page_title == 'Autres' %}class="selected"{% endif %}
-    >Autres</a>
+<div class="navbar button-list">
+    {% for page, endpoint in [('Cocktails', 'cocktails'), ('Bières', 'beers'), ('Autres', 'others')] %}
+        <a href="{{ url_for('public.' + endpoint) }}"
+           class="{% if page_title == page %}selected{% endif %}">
+            {{ page }}
+        </a>
+    {% endfor %}
 </div>
 
 {% endmacro %}
