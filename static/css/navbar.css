@@ -1,54 +1,28 @@
 .navbar {
     width: 30%;
     margin: auto;
+    padding: var(--text-big) 0;
     display: flex;
-    align-items: center;
+    flex-direction: row;
     justify-content: space-around;
-    margin-bottom: var(--default-spacing);
 }
 
-.navbar a {
-    padding: 10px;
-    width: 33%;
+.navbar > * {
+    width: 32%;
     text-align: center;
-    color: black;
-    text-decoration: none;
-    background: var(--primary-light);
+    background: var(--primary);
+    color: var(--light);
+    padding: calc(var(--text-small) / 2) var(--text-small);
+}
+
+.navbar > *:first-child {
+    border-radius: 8px 0 0 8px;
+}
+
+.navbar > *:last-child {
+    border-radius: 0 8px 8px 0;
 }
 
 .navbar .selected {
-    background: var(--primary);
-    color: white;
-}
-
-.navbar a:first-child {
-    border-radius: 5px 0px 0px 5px;
-}
-
-.navbar a:last-child {
-    border-radius: 0px 5px 5px 0px;
-}
-
-@media screen and (min-width: 1920px) {
-    .navbar {
-        width: 30%;
-    }
-}
-
-@media screen and (min-width: 1040px) and (max-width: 1919px) {
-    .navbar {
-        width: 40%;
-    }
-}
-
-@media screen and (min-width: 810px) and (max-width: 1039px) {
-    .navbar {
-        width: 60%;
-    }
-}
-
-@media screen and (max-width: 809px) {
-    .navbar {
-        width: 90%;
-    }
+    background: var(--dark);
 }
