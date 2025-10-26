@@ -6,7 +6,7 @@
     <!-- ingrédients > no alcohol -->
     <!-- reset > rechercher -->
 
-    <h4>Filtres</h4>
+    <p>Filtrer</p>
 
     {# <div class="ingredients_search">
         <i class="fa-solid fa-magnifying-glass description"></i>
@@ -23,29 +23,31 @@
         </div>
     </div> #}
 
-    <div class="cocktail_name_search">
-        <label for="name">Nom :</label>
-        <input type="text" name="name" id="name" class="cocktail_name" placeholder="Nom">
+    <div class="inputs">
+        <div class="input input-text cocktail_name_search">
+            <label for="name">Nom :</label>
+            <input type="text" name="name" id="name" class="cocktail_name" placeholder="Rechercher par un nom">
+        </div>
+
+        <div class="input input-select cocktail_type_search">
+            <label for="cocktail_type">Type :</label>
+            <select name="cocktail_type" class="cocktail_type" id="cocktail_type">
+                <option value="" selected>Sélectionner un type</option>
+                <option value="long">Long</option>
+                <option value="short">Short</option>
+                <option value="shot">Shot</option>
+            </select>
+        </div>
+
+        <div class="input input-check cocktail_alcohol_search">
+            <input type="checkbox" name="no_alcohol_option" id="no_alcohol_option" class="no_alcohol_option">
+            <label for="no_alcohol_option">Sans alcool</label>
+        </div>
     </div>
 
-    <div class="cocktail_type_search">
-        <label for="cocktail_type">Type :</label>
-        <select name="cocktail_type" class="cocktail_type" id="cocktail_type">
-            <option value="" selected>Sélectionner un type</option>
-            <option value="long">Long</option>
-            <option value="short">Short</option>
-            <option value="shot">Shot</option>
-        </select>
-    </div>
-
-    <div class="cocktail_alcohol_search">
-        <input type="checkbox" name="no_alcohol_option" id="no_alcohol_option" class="no_alcohol_option">
-        <label for="no_alcohol_option">Sans alcool</label>
-    </div>
-
-    <div class="cocktail_buttons_search">
-        <button onclick="resetFilters(this)">Effacer les filtres</button>
-        <button onclick="searchCocktails()">Rechercher</button>
+    <div class="cocktail_buttons_search buttons">
+        <button onclick="resetFilters(this)" class="button-outline button-primary">Effacer les filtres</button>
+        <button onclick="searchCocktails()" class="button-full button-primary">Rechercher</button>
     </div>
 </div>
 
