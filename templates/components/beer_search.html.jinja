@@ -1,16 +1,24 @@
 {% macro beer_search(types) %}
 
 <div class="beer_search search">
-    <select name="beer_type" class="beer_type">
-        <option value="" selected></option>
-        {% for type in types %}
-        <option value="{{ type }}">{{ type }}</option>
-        {% endfor %}
-    </select>
+    <p>Filtrer</p>
+    
+    <div class="inputs">
+        <div class="input input-select">
+            <label for="beer_type">Type :</label>
+            <select name="beer_type" class="beer_type" id="beer_type">
+                <option value="" selected>Sélectionner un type</option>
+                {% for type in types %}
+                <option value="{{ type }}">{{ type }}</option>
+                {% endfor %}
+            </select>
+        </div>
+    </div>
 
-    <button onclick="resetFilters(this)">Effacer les filtres</button>
-
-    <button onclick="searchBeers()">Rechercher</button>
+    <div class="cocktail_buttons_search buttons">
+        <button onclick="resetFilters(this)" class="button-outline button-primary">Effacer les filtres</button>
+        <button onclick="searchBeers()" class="button-full button-primary">Rechercher</button>
+    </div>
 </div>
 
 <script src="{{ url_for('static', filename = 'searchBeers.js') }}"></script>
