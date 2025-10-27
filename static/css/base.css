@@ -47,6 +47,8 @@ a {
 
 .header {
     background-color: var(--primary);
+    background: linear-gradient(90deg, var(--dark) 0%, var(--primary) 100%);
+    /* background-color: var(--primary); */
     max-height: 25vh;
 }
 
@@ -56,6 +58,11 @@ a {
     font-size: calc(var(--text-big) * 10);
     /* transform: translateY(35%); */
     color: rgba(255, 255, 255, .2);
+
+    -webkit-user-select: none;       
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
 }
 
 .content {
