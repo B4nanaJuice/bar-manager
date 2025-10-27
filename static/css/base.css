@@ -46,7 +46,6 @@ a {
 }
 
 .header {
-    background-color: var(--primary);
     background: linear-gradient(90deg, var(--dark) 0%, var(--primary) 100%);
     /* background-color: var(--primary); */
     max-height: 25vh;
@@ -100,4 +99,14 @@ a {
 .button-list {
     display: flex;
     flex-direction: row;
-}}
+}
+
+.flex { display: flex; }
+.flex-row { flex-direction: row; }
+.flex-column { flex-direction: column; }
+.col-12 { width: 100%; }
+.col-9 { width: 75%; }
+.col-8 { width: calc(200% / 3); }
+.col-6 { width: 50%; }
+.col-4 { width: calc(100% / 3); }
+.col-3 { width: 25%; }
