@@ -9,7 +9,7 @@
     width: 30%;
 }
 
-input[type="text"], select {
+input[type="text"], input[type="password"], select {
     padding: calc(var(--text-small) / 2);
     border: none;
     outline: none;
