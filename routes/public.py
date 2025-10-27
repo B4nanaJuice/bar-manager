@@ -83,14 +83,21 @@ def beers():
     _query = db.select(BeerStock)
     if beer_type != "":
         _query = _query.where(BeerStock.type == beer_type)
-    beers: List[BeerStock] = db.session.execute(_query).scalars()
+
+    # Query
+    beers: List[BeerStock] = db.paginate(_query.order_by(BeerStock.name))
 
     # Get the beer types
     _query = db.select(BeerStock.type)
     beer_types: List[str] = list(set(db.session.execute(_query).scalars()))
 
+    # Handle url arguments
+    url_args = dict(request.args)
+    if url_args.get("page"):
+        url_args.pop("page")
+
     # Render the template with the wanted beers
-    return render_template("beers.html.jinja", page_title = "Bières", beers = beers, beer_types = beer_types)
+    return render_template("beers.html.jinja", page_title = "Bières", beers = beers, beer_types = beer_types, endpoint = request.endpoint, url_args = url_args)
 
 @page.route("/others", methods = ["GET"])
 def others():
