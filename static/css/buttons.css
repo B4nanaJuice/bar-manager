@@ -5,7 +5,7 @@ button, .button {
     transition: transform .2s ease, box-shadow .3s ease;
 }
 
-button:hover {
+button:hover, .button:hover {
     cursor: pointer;
     transform: scale(1.05);
     box-shadow: rgba(0, 0, 0, .3) 4px 4px 4px;
