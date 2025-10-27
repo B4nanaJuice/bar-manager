@@ -1,0 +1,11 @@
+{% macro beer_card(beer) %}
+
+<div class="card inline-card beer-card">
+    <p> {{ beer.name }} <span class="small"> ({{ beer.degree }}°) </span> </p>
+    
+    <p class="small">
+        {{ beer.type }}
+    </p>
+</div>
+
+{% endmacro %}
