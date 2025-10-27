@@ -1,5 +1,7 @@
 {% extends "base.html" %}
 {% from "components/beer_search.html.jinja" import beer_search %}
+{% from "components/beer_card.html.jinja" import beer_card %}
+{% from "components/pagination.html.jinja" import pagination %}
 
 {% block header %}
     {{ super() }}
@@ -7,8 +9,6 @@
 {% endblock %}
 
 {% block content %}
-    <h4>{{ page_title }}</h4>
-
     <!-- Search engine -->
     {{ beer_search(beer_types)|safe }}
 
@@ -17,13 +17,14 @@
         <ul class="item-list">
             {% for beer in beers %}
             <li>
-                <div class="beer-card">
-                    {{ beer.name }} ({{ beer.type }}) {{ beer.degree }}°
-                </div>
+                {{ beer_card(beer)|safe }}
             </li>
             {% endfor %}
         </ul>
     {% else %}
-        <p>Il n'y a rien à voir pour le moment...</p>
+        <p style="text-align: center;">Il n'y a rien à voir pour le moment...</p>
     {% endif %}
+
+    <!-- Pagination -->
+    {{ pagination(beers, endpoint, url_args) }}
 {% endblock %}
