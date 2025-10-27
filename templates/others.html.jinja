@@ -1,19 +1,29 @@
 {% extends "base.html" %}
 
 {% block content %}
-    <h4>Jus</h4>
+<div class="flex flex-row">
 
-    <ul>
-        {% for juice in juices %}
-            <li>{{ juice.name }}</li>
-        {% endfor %}
-    </ul>
+    <div class="col-6">
+        <h2>Jus</h2>
+        <ul>
+            {% for juice in juices %}
+                {% if juice.name not in ['Jus citron'] %}
+                    <li>{{ juice.name }}</li>
+                {% endif %}
+            {% endfor %}
+        </ul>
+    </div>
 
-    <h4>Sirops</h4>
-    <ul>
-        {% for syrup in syrups %}
-            <li>{{ syrup.name }}</li>
-        {% endfor %}
-    </ul>
+    <div class="col-6">
+        <h2>Sirops</h2>
+        <ul>
+            {% for syrup in syrups %}
+                {% if syrup.name not in ['Sirop simple'] %}
+                    <li>{{ syrup.name }}</li>
+                {% endif %}
+            {% endfor %}
+        </ul>
+    </div>
 
+</div>
 {% endblock %}
