@@ -2,11 +2,7 @@
 let params = new URLSearchParams(document.location.search);
 let beer_type = params.get("beer_type") || "";
 
-window.onload = function() {
-    if (beer_type != "") {
-        document.querySelector(".beer_type").value = beer_type;
-    }
-}
+document.querySelector(".beer_type").value = beer_type;
 
 function searchBeers() {
     // Take the beer type

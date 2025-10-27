@@ -2,13 +2,11 @@
 {% from "components/admin_beers.html.jinja" import admin_beers %}
 {% from "components/admin_ingredients.html.jinja" import admin_ingredients %}
 
-{% block content %}
-    <h4>{{ page_title }}</h4>
-    
-    <h4>Bières</h4>
+{% block content %}    
+    <h2>Bières</h2>
     {{ admin_beers(beers)|safe }}
 
 
-    <h4>Ingrédients</h4>
+    <h2>Ingrédients</h2>
     {{ admin_ingredients(ingredients, ingredient_stock)|safe }}
 {% endblock %}

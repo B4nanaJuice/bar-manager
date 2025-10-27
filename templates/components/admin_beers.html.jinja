@@ -10,9 +10,9 @@
 </ul>
 
 <form action="{{ url_for('admin.add_beer') }}" method="post">
-    <input type="text" name="beerName" required>
-    <input type="text" name="beerType" required>
-    <input type="number" name="beerDegree" required>
+    <input type="text" name="beerName" required placeholder="Nom">
+    <input type="text" name="beerType" required placeholder="Type">
+    <input type="number" name="beerDegree" required placeholder="Degré">
     <input type="submit" value="Ajouter">
 </form>
 
