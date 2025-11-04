@@ -1,19 +1,23 @@
+{% from "components/beer_card.html.jinja" import beer_card %}
+
 {% macro admin_beers(beers) %}
 
 <ul>
     {% for beer in beers %}
-    <li>
-        {{ beer.name }} ({{ beer.type }}) {{ beer.degree }}°
-        <a href="{{ url_for('admin.remove_beer', beer_id = beer.id) }}"><button>X</button></a>
-    </li>
+        <li style="display: flex; align-items: center;">
+            <a href="{{ url_for('admin.remove_beer', beer_id = beer.id) }}" style="margin: 0 var(--text-big) 0 0;" title="Supprimer">
+                <i class="fa-solid fa-trash"></i>
+            </a>
+            {{ beer_card(beer)|safe }}
+        </li>
     {% endfor %}
 </ul>
 
-<form action="{{ url_for('admin.add_beer') }}" method="post">
-    <input type="text" name="beerName" required placeholder="Nom">
-    <input type="text" name="beerType" required placeholder="Type">
-    <input type="number" name="beerDegree" required placeholder="Degré">
-    <input type="submit" value="Ajouter">
+<form action="{{ url_for('admin.add_beer') }}" method="post" class="inputs">
+    <input type="text" name="beerName" required placeholder="Nom" class="col col-3">
+    <input type="text" name="beerType" required placeholder="Type" class="col col-3">
+    <input type="number" name="beerDegree" required placeholder="Degré" class="col col-3">
+    <input type="submit" value="Ajouter" class="button button-outline button-primary col col-2">
 </form>
 
 {% endmacro %}
