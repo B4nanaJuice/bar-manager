@@ -1,15 +1,20 @@
 {% macro admin_ingredients(ingredients, stock) %}
 
 <form action="{{ url_for('admin.update_ingredients_stock') }}" method="post">
-    <ul>
+
+    <div class="flex flex-row">
         {% for ingredient in ingredients %}
-        <li>
-        <input type="checkbox" name="{{ ingredient }}" {% if ingredient in stock %} checked {% endif %}>
-        <label for="{{ ingredient }}">{{ ingredient  }}</label>
-        </li>
+        <div class="input-check col col-4">
+            <input type="checkbox" name="{{ ingredient }}" {% if ingredient in stock %} checked {% endif %}>
+            <label for="{{ ingredient }}">{{ ingredient  }}</label>
+        </div>
         {% endfor %}
-    </ul>
-    <input type="submit" value="Valider">
+    </div>
+
+    <div class="buttons">
+        <input type="submit" value="Valider" class="button button-primary button-full col col-6">
+    </div>
+
 </form>
 
 {% endmacro %}
