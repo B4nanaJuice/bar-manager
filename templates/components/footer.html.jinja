@@ -1,8 +1,8 @@
 {% macro footer() %}
 
-<div class="footer dark">
-    <div class="sitemap">
-        <h4>Plan du site</h4>
+<div class="footer dark flex">
+    <div class="col-6 text-center">
+        <p>Plan du site</p>
         <ul>
         {% for endpoint in ["cocktails", "beers", "others"] %}
             <li>
@@ -12,10 +12,10 @@
         </ul>
     </div>
 
-    <div class="other">
-        <p>Des idées ? Des retours ? J'ai rien fait pour ça, donc viens m'en parler directement.</p>
+    <div class="col-6 text-center">
+        <p>Des idées ? Des retours ? J'ai rien fait pour ça -^- donc viens m'en parler directement :3</p>
         <p>Copyright &copy; - MaxeW - 2025</p>
-        <p>Fait avec amour <span class="description-light">(et un peu de temps perdu j'avoue)</span></p>
+        <p>Fait avec amour <span class="small">(et un peu de temps perdu j'avoue)</span></p>
     </div>
 </div>
 
