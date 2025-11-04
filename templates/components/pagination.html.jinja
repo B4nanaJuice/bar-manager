@@ -14,7 +14,7 @@
                 {% if page != pagination.page %}
                 <a href="{{ url_for(endpoint, page = page, **url_args) }}">{{ page }}</a>
                 {% else %}
-                <strong>{{ page }}</strong>
+                <div class="current-page">{{ page }}</div>
                 {% endif %}
             {% else %}
                 <span class="ellipsis">…</span>
@@ -32,7 +32,7 @@
     No results...
     {% endif %}
 
-    <div class="page-items small description">
+    <div class="page-items small">
         {{ pagination.first }} - {{ pagination.last }} sur {{ pagination.total }}
     </div>
 </div>

@@ -30,7 +30,7 @@ def login():
             return redirect(return_url)
         return redirect(url_for('admin.admin_panel'))
 
-    return render_template("login.html.jinja", page_title = "Authentification")
+    return render_template("login.html.jinja", page_title = "Login")
 
 @page.route("/logout", methods = ["GET"])
 def logout():
