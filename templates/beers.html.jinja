@@ -12,6 +12,8 @@
     <!-- Search engine -->
     {{ beer_search(beer_types)|safe }}
 
+    <p class="small" style="float: right;">{{ beers.total }} résultats</p>
+
     <!-- Show the data -->
     {% if beers.items|count() > 0 %}
         <ul class="item-list">

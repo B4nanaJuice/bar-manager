@@ -3,14 +3,16 @@
 {% from "components/cocktail_search.html.jinja" import cocktail_search %}
 {% from "components/pagination.html.jinja" import pagination %}
 
-{# {% block header %}
+{% block header %}
     {{ super() }}
-    <link rel="stylesheet" href="{{ url_for('static', filename = 'css/pages/cocktails.css') }}">
-{% endblock %} #}
+    <link rel="stylesheet" href="{{ url_for('static', filename = 'css/pagination.css') }}">
+{% endblock %}
 
 {% block content %}
     <!-- Search engine -->
     {{ cocktail_search(ingredients)|safe }}
+
+    <p class="small" style="float: right;">{{ cocktails.total }} résultats</p>
 
     <!-- Show the data -->
     <ul class="item-list">
