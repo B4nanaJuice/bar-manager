@@ -5,11 +5,7 @@
     margin: var(--text-big) 0;
 }
 
-.input {
-    width: 30%;
-}
-
-input[type="text"], input[type="password"], select {
+input[type="text"], input[type="password"], input[type="number"], select {
     padding: calc(var(--text-small) / 2);
     border: none;
     outline: none;
@@ -19,7 +15,7 @@ input[type="text"], input[type="password"], select {
     transition: boder .2s ease;
 }
 
-input[type="text"]:focus, select:focus {
+input[type="text"]:focus, input[type="number"]:focus, select:focus {
     border-bottom: solid 2px var(--primary);
 }
 
