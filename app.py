@@ -1,6 +1,6 @@
 from flask import Flask, render_template
 
-from routes import public, admin, auth
+from routes import public, admin, auth, api
 from data.database import init_database
 from dotenv import load_dotenv
 import os
@@ -16,6 +16,7 @@ init_database(app = app)
 app.register_blueprint(public.page)
 app.register_blueprint(admin.page)
 app.register_blueprint(auth.page)
+app.register_blueprint(api.page)
 
 # Add app error handler
 @app.errorhandler(404)
