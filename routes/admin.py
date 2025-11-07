@@ -7,6 +7,7 @@ from data.models.cocktail import Cocktail
 from data.models.beer_stock import BeerStock
 from data.models.ingredient_stock import IngredientStock
 from data.models.cocktail_ingredient import CocktailIngredient
+from data.models.order import Order
 
 page = Blueprint("admin", __name__, template_folder = "templates", static_folder = "static", url_prefix = "/admin")
 
@@ -89,14 +90,23 @@ def update_ingredients_stock():
     # Redirect to admin panel
     return redirect(url_for('admin.admin_panel'))
 
+@page.route("/orders", methods = ['GET'])
+def orders():
+    _query = db.select(Order)
+    orders: List[Order] = db.session.execute(_query).scalars()
+    return "TEST"
+
 @page.route("/populate", methods = ["GET"])
 def populate():
     # This function is only here to add content to the database
     # cocktails: List[Cocktail] = [
-        
+    
     # ]
 
-    # db.session.add_all(cocktails)
-    # db.session.commit()
+    # try :
+    #     db.session.add_all(cocktails)
+    #     db.session.commit()
+    # except:
+    #     print("An error occured.")
 
     return redirect(url_for("public.cocktails"))
