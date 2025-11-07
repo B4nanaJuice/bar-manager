@@ -5,7 +5,7 @@
     <div class="flex flex-row">
         {% for ingredient in ingredients %}
         <div class="input-check col col-4">
-            <input type="checkbox" name="{{ ingredient }}" {% if ingredient in stock %} checked {% endif %}>
+            <input type="checkbox" name="{{ ingredient }}" id="{{ ingredient }}" {% if ingredient in stock %} checked {% endif %}>
             <label for="{{ ingredient }}">{{ ingredient  }}</label>
         </div>
         {% endfor %}
