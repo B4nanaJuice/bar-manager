@@ -94,6 +94,10 @@ def update_ingredients_stock():
 def orders():
     _query = db.select(Order)
     orders: List[Order] = db.session.execute(_query).scalars()
+
+    for order in orders:
+        print(f"Order n°{order.id} by {order.client} : {order.cocktail or order.beer}")
+
     return "TEST"
 
 @page.route("/populate", methods = ["GET"])
