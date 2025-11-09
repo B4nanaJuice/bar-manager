@@ -71,8 +71,6 @@ a {
     margin-bottom: var(--text-big);
     border-radius: var(--text-small);
     background: rgba(0, 0, 0, .1);
-
-    border-radius: var(--text-small);
     padding: var(--text-big);
     box-shadow: rgba(from var(--dark) r g b / 0.5) 0 4px var(--text-small);
 
