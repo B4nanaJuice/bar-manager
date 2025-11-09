@@ -1,6 +1,7 @@
 {% from "components/navbar.html.jinja" import navbar %}
 {% from "components/footer.html.jinja" import footer %}
 {% from "components/notification.html.jinja" import notification %}
+{% from "components/modal.html.jinja" import modal %}
 
 <!DOCTYPE html>
 <html lang="fr">
@@ -15,6 +16,7 @@
     <link rel="stylesheet" href="{{ url_for('static', filename = 'css/buttons.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename = 'css/cards.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename = 'css/navbar.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename = 'css/modal.css') }}">
     {% endblock %}
 </head>
 
@@ -29,6 +31,9 @@
             </div>
         {% endif %}
     {% endwith %}
+
+    <!-- Modal -->
+    {{ modal()|safe }}
 
     <div class="header">
         <h2>{{ page_title }}</h2>
