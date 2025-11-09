@@ -45,18 +45,8 @@
 
     <script src="{{ url_for('static', filename = 'utils.js') }}"></script>
     <script src="https://kit.fontawesome.com/f64f9053f0.js" crossorigin="anonymous"></script>
+    <script src="{{ url_for('static', filename = 'modalHelper.js') }}"></script>
 
 </body>
-
-<script>
-    window.onload = function() {
-        footer = document.querySelector(".footer");
-        footerHeight = footer.offsetHeight;
-        body = document.querySelector("body");
-        style = window.getComputedStyle(document.body);
-        defaultSpace = parseInt(style.getPropertyValue('--default-spacing').match(/\d+/)[0]);
-        body.style.paddingBottom = `${footerHeight + defaultSpace}px`;
-    }
-</script>
 
 </html>
