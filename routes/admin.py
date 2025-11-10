@@ -104,13 +104,10 @@ def orders():
 def populate():
     # This function is only here to add content to the database
     # cocktails: List[Cocktail] = [
-    
+
     # ]
 
-    # try :
-    #     db.session.add_all(cocktails)
-    #     db.session.commit()
-    # except:
-    #     print("An error occured.")
+    # db.session.add_all(cocktails)
+    # db.session.commit()
 
     return redirect(url_for("public.cocktails"))
