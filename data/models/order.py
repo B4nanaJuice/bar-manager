@@ -10,9 +10,9 @@ class Order(db.Model):
 
     id: Mapped[int] = mapped_column(unique = True, primary_key = True, autoincrement = True)
     client: Mapped[str] = mapped_column(nullable = False)
-    cocktail_id: Mapped[int] = mapped_column(ForeignKey('cocktails.id'))
+    cocktail_id: Mapped[int] = mapped_column(ForeignKey('cocktails.id'), nullable = True)
     cocktail: Mapped["Cocktail"] = relationship()
-    beer_id: Mapped[int] = mapped_column(ForeignKey('beer_stocks.id'))
+    beer_id: Mapped[int] = mapped_column(ForeignKey('beer_stocks.id'), nullable = True)
     beer: Mapped["BeerStock"] = relationship()
 
     def __repr__(self):
