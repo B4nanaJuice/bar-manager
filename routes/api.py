@@ -1,4 +1,4 @@
-from flask import Blueprint, request, json
+from flask import Blueprint, request, jsonify
 
 from data.database import db
 from data.models.order import Order
@@ -12,24 +12,43 @@ def order_cocktail() -> dict:
     try:
         cocktail_id: int = request.args.get("cocktail-id", type = int)
         client_name: str = request.args.get("client-name", type = str)
+
+        print(client_name)
     except:
-        print("Error")
-        return "Error in url arguments.", 400
+        return jsonify({
+            "response": "Error in url parameters",
+            "status": 400
+        })
     
-    if not cocktail_id or not client_name:
-        return "Error in url arguments.", 400
+    if not cocktail_id or not client_name or cocktail_id == "" or client_name == "":
+        return jsonify({
+            "response": "Missing url parameters",
+            "status": 400
+        })
+    
+    cocktail: Cocktail = db.session.execute(db.select(Cocktail).where(Cocktail.id == cocktail_id)).scalar_one_or_none()
+    if not cocktail:
+        return jsonify({
+            "response": "Unable to find cocktail",
+            "status": 400
+        })
     
     try:
-        cocktail: Cocktail = db.session.execute(db.select(Cocktail).where(Cocktail.id == cocktail_id)).scalar_one()
         order: Order = Order(cocktail = cocktail, client = client_name)
 
         db.session.add(order)
         db.session.commit()
-
-        return "Successfully placed order.", 200
     except:
-        print("Error")
-        return "Cocktail not found", 400
+        return jsonify({
+            "response": "Error while trying to insert order into database",
+            "status": 400
+        })
+
+    return jsonify({
+            "response": "Successfully placed order",
+            "status": 200
+        })
+
 
 @page.route("/order-beer", methods = ['GET'])
 def order_beer() -> dict:
