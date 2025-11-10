@@ -1,6 +1,7 @@
 {% macro cocktail_card(cocktail) %}
 
-<div class="card inline-card cocktail-card" onclick="createModal('Title', 'Description', 'Footer')">
+<div class="card inline-card cocktail-card" 
+     onclick="createCocktailOrderModal({{ cocktail.id }}, '{{ cocktail.name }}', [{% for ingredient in cocktail.ingredients %}'{{ ingredient.name }}'{{ ',' if not loop.last else '' }}{% endfor %}])">
     <p> {{ cocktail.name }} <span class="small"> ({{ cocktail.type }}) </span> </p>
     
     <p class="small">
