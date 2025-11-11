@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+
+{% block content %}    
+    <h2>Commandes</h2>
+
+    <table style="width: 100%;">
+        <tr>
+            <th class="col col-1">n°</th>
+            <th class="col col-4">Nom</th>
+            <th class="col col-6">Commande</th>
+            <th class="col col-1"></th>
+        </tr>
+
+        {% for order in orders %}
+        <tr>
+            <td>{{ order.id }}</td>
+            <td>{{ order.client }}</td>
+            <td>
+                {% if order.cocktail %}
+                    {{ order.cocktail.name }} ({% for ing in order.cocktail.ingredients %} {{ ing.quantity }}cL {{ing.name}} {{ "-" if not loop.last else "" }} {% endfor %})
+                {% else %}
+                    {{ order.beer.name }}
+                {% endif %}
+            </td>
+            <td><a href="{{ url_for('admin.remove_order', order_id = order.id) }}" class="close">&times;</a></td>
+        </tr>
+        {% endfor %}
+    </table>
+{% endblock %}
