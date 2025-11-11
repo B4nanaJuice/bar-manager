@@ -32,10 +32,10 @@
 
 /* The Close Button */
 .close {
-  color: black;
   float: right;
   font-size: 28px;
   font-weight: bold;
+  transition: color .3s ease;
 }
 
 .close:hover,
