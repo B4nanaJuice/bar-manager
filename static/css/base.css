@@ -10,6 +10,10 @@
     --text-normal: 1rem;
     --text-small: .8rem;
     --text-big: calc(var(--text-normal) * 1.61);
+
+    --alert: #E74C3C;
+    --success: #30CB83;
+    --information: #54A0FF;
 }
 
 * {
@@ -162,4 +166,16 @@ a {
 
 .justify-around {
     justify-content: space-around;
+}
+
+@media screen and (max-width: 1440px) {
+    .content {
+        width: 70vw;
+    }
+}
+
+@media screen and (max-width: 920px) {
+    .content {
+        width: 90vw;
+    }
 }
