@@ -1,0 +1,28 @@
+.notifications {
+    position: fixed;
+    width: 40vw;
+    top: 0;
+    left: 30vw;
+}
+
+.notification {
+    margin: var(--text-small);
+    padding: var(--text-normal);
+    border-radius: var(--text-small);
+    width: 100%;
+}
+
+.notification.success {
+    background: var(--success);
+    color: var(--dark);
+}
+
+.notification.error {
+    background: var(--alert);
+    color: var(--light);
+}
+
+.notification.info {
+    background: var(--information);
+    color: var(--dark);
+}
