@@ -12,8 +12,6 @@ def order_cocktail() -> dict:
     try:
         cocktail_id: int = request.args.get("cocktail-id", type = int)
         client_name: str = request.args.get("client-name", type = str)
-
-        print(client_name)
     except:
         return jsonify({
             "response": "Error in url parameters",
@@ -56,20 +54,37 @@ def order_beer() -> dict:
         beer_id: int = request.args.get("beer-id", type = int)
         client_name: str = request.args.get("client-name", type = str)
     except:
-        print("Error")
-        return "Error in url arguments.", 400
+        return jsonify({
+            "response": "Error in url parameters",
+            "status": 400
+        })
     
-    if not beer_id or not client_name:
-        return "Error in url arguments.", 400
+    if not beer_id or not client_name or beer_id == "" or client_name == "":
+        return jsonify({
+            "response": "Missing url parameters",
+            "status": 400
+        })
     
+
+    beer: BeerStock = db.session.execute(db.select(BeerStock).where(BeerStock.id == beer_id)).scalar_one_or_none()
+    if not beer:
+        return jsonify({
+            "response": "Unable to find beer",
+            "status": 400
+        })
+        
     try:
-        beer: BeerStock = db.session.execute(db.select(BeerStock).where(BeerStock.id == beer_id)).scalar_one()
         order: Order = Order(beer = beer, client = client_name)
 
         db.session.add(order)
         db.session.commit()
-
-        return "Successfully placed order.", 200
     except:
-        print("Error")
-        return "Beer not found", 400
+        return jsonify({
+            "response": "Error while trying to insert order into database",
+            "status": 400
+        })
+
+    return jsonify({
+            "response": "Successfully placed order",
+            "status": 200
+        })
