@@ -93,12 +93,28 @@ def update_ingredients_stock():
 @page.route("/orders", methods = ['GET'])
 def orders():
     _query = db.select(Order)
-    orders: List[Order] = db.session.execute(_query).scalars()
+    orders: List[Order] = list(db.session.execute(_query).scalars())
 
-    for order in orders:
-        print(f"Order n°{order.id} by {order.client} : {order.cocktail or order.beer}")
+    return render_template("admin_orders.html.jinja", page_title = "Commandes", orders = orders)
 
-    return "TEST"
+@page.route("/remove-order", methods = ['GET'])
+def remove_order():
+    try:
+        order_id: int = request.args.get('order_id', type = int)
+    except:
+        return redirect(url_for('admin.orders'))
+    
+    if not order_id or order_id == "":
+        return redirect(url_for('admin.orders'))
+    
+    order: Order = db.session.execute(db.select(Order).where(Order.id == order_id)).scalar_one_or_none()
+    if not order:
+        return redirect(url_for('admin.orders'))
+    
+    db.session.delete(order)
+    db.session.commit()
+
+    return redirect(url_for('admin.orders'))
 
 @page.route("/populate", methods = ["GET"])
 def populate():
