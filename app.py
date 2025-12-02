@@ -1,24 +1,25 @@
-from flask import Flask, render_template
+from flask import Flask
 
-from routes import public, admin, auth, api
 from data.database import init_database
+from logger import configure_logging
 from dotenv import load_dotenv
 import os
 
+from routes import public, auth, admin
+
 load_dotenv()
 
-# App initialization
 app = Flask(__name__)
-app.secret_key = os.getenv("SECRET_KEY")
+
+app.secret_key = os.getenv('APP_SECRET_KEY')
+
 init_database(app = app)
+configure_logging(app = app)
 
-# Add paths to app
 app.register_blueprint(public.page)
-app.register_blueprint(admin.page)
 app.register_blueprint(auth.page)
-app.register_blueprint(api.page)
+app.register_blueprint(admin.page)
 
-# Add app error handler
 @app.errorhandler(404)
 def page_not_found(error):
-    return render_template('errors/404.html', page_title = "Page introuvable")
+    return "404 - Page introuvable"

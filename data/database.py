@@ -1,9 +1,7 @@
+from dotenv import load_dotenv
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.orm import DeclarativeBase
 from os import getenv
-from dotenv import load_dotenv
-
-load_dotenv()
 
 class Base(DeclarativeBase):
     pass
