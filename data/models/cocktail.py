@@ -1,17 +1,26 @@
-from typing import List
+from sqlalchemy import ForeignKey
 from sqlalchemy.orm import Mapped, mapped_column, relationship
-from data.database import db
+from data.models.drink import Drink
+from data.models.enums import CocktailType, Glass, MixMethod
 from data.models.cocktail_ingredient import CocktailIngredient
+from typing import List
 
-class Cocktail(db.Model):
-    __tablename__ = 'cocktails'
+class Cocktail(Drink):
+    __tablename__ = 'cocktail'
 
-    id: Mapped[int] = mapped_column(unique = True, primary_key = True, autoincrement = True)
-    name: Mapped[str] = mapped_column(unique = True)
-    type: Mapped[str]
+    id: Mapped[int] = mapped_column(ForeignKey('drink.id'), primary_key = True)
+    type: Mapped[CocktailType]
     has_alcohol: Mapped[bool]
-    glass_type: Mapped[str] = mapped_column(default = "martini")
-    ingredients: Mapped[List["CocktailIngredient"]] = relationship()
+    glass: Mapped[Glass]
+    mix_method: Mapped[MixMethod]
+    garnish: Mapped[str] = mapped_column(nullable = True)
+    ingredients: Mapped[List["CocktailIngredient"]] = relationship(
+        cascade = 'all, delete-orphan'
+    )
+
+    __mapper_args__ = {
+        'polymorphic_identity': 'cocktail'
+    }
 
     def __repr__(self):
-        return f"<Cocktail {self.name}>"
+        return f'<Cocktail {self.name}>'
