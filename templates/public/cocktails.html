@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cocktails | La Niche</title>
+</head>
+<body>
+
+    <form action="{{ url_for('public.cocktails') }}" method="post">
+        <input type="text" 
+                name="cocktail-name" id="cocktail-name" 
+                placeholder="Nom"
+                {% if 'cocktail_name' in search and search['cocktail_name'] %}
+                    value="{{ search['cocktail_name'] }}"
+                {% endif %}                
+                >
+
+        <input type="checkbox" name="no-alcohol" id="no-alcohol">
+
+        <select name="cocktail-type" id="cocktail-type">
+            <option value="" selected>Sélectionner un type</option>
+            {% for cocktail_type in enums.cocktailType.__members__.keys() %}
+                <option value="{{ cocktail_type }}">{{ enums.cocktailType[cocktail_type].value|capitalize() }}</option>
+            {% endfor %}
+        </select>
+
+        <input type="radio" name="tag" id="all" value="all" checked>
+        <label for="all">Tout</label>
+        {% for tag in enums.tagName.__members__.keys() %}
+            <input type="radio" name="tag" id="{{ tag }}" value="{{ tag }}">
+            <label for="{{ tag }}">{{ enums.tagName[tag].value|capitalize() }}</label>
+        {% endfor %}
+
+        <input type="submit" value="Rechercher">
+    </form>
+
+    <div>
+        {% for cocktail in cocktails %}
+            {{ cocktail.name }}
+        {% endfor %}
+    </div>
+    
+
+    
+    
+</body>
+</html>

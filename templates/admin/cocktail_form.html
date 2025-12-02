@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    
+    <form action="{{ url_for('admin.add_cocktail') }}" method="post">
+
+        <label for="cocktail-name">Cocktail name</label>
+        <input type="text" name="cocktail-name" id="cocktail-name">
+
+        <label for="cocktail-type">Cocktail type</label>
+        <select name="cocktail-type" id="cocktail-type">
+            <option value="">Sélectionner un type</option>
+            {% for cocktail_type in enums.cocktailType.__members__.keys() %}
+                <option value="{{ cocktail_type }}">{{ enums.cocktailType[cocktail_type].value|capitalize() }}</option>
+            {% endfor %}
+        </select>
+
+        <label for="has-alcohol">Contient de l'alcool</label>
+        <input type="checkbox" name="has-alcohol" id="has-alcohol" checked>
+
+        <label for="glass">Verre</label>
+        <select name="glass" id="glass">
+            <option value="">Sélectionner un verre</option>
+            {% for glass in enums.glass.__members__.keys() %}
+                <option value="{{ glass }}">{{ enums.glass[glass].value|capitalize() }}</option>
+            {% endfor %}
+        </select>
+
+        <label for="mix-method">Mélange</label>
+        <select name="mix-method" id="mix-method">
+            <option value="">Sélectionner une valeur</option>
+            {% for mix_method in enums.mixMethod.__members__.keys() %}
+                <option value="{{ mix_method }}">{{ enums.mixMethod[mix_method].value|capitalize() }}</option>
+            {% endfor %}
+        </select>
+
+        <label for="garnish">Garniture</label>
+        <input type="text" name="garnish" id="garnish">
+
+        <h3>Ingrédients</h3>
+
+        <div class="ingredients">
+            <button type="button" class="add-ingredient-button" onclick="addIngredientField()">+</button>
+        </div>
+
+        <h3>Tags</h3>
+
+        {% for tag_name in enums.tagName.__members__.keys() %}
+            <label for="{{ tag_name }}">{{ enums.tagName[tag_name].value|capitalize() }}</label>
+            <input type="checkbox" name="{{ tag_name }}" id="{{ tag_name }}">
+        {% endfor %}
+
+        <input type="submit" value="Valider">
+    </form>
+
+    <ul class="cocktails">
+        {% for cocktail in cocktails %}
+        <li>
+            {{ cocktail.name }} - {{ cocktail.type }} - {{ cocktail.mix_method }}
+            <form action="{{ url_for('admin.remove_cocktail') }}" method="post">
+                <input type="number" name="cocktail-id" id="cocktail-id" value="{{ cocktail.id }}">
+                <input type="submit" value="Delete">
+            </form>
+        </li>
+        {% endfor %}
+    </ul>
+    
+</body>
+
+<script>
+    function addIngredientField() {
+        let addIngredientButton = document.querySelector(".add-ingredient-button");
+        let ingredientsDiv = addIngredientButton.parentElement;
+
+        let ingredientLine = document.createElement('div');
+        ingredientLine.innerHTML = `
+            <input type="text" name="ingredient-name" id="ingredient-name" placeholder="Nom">
+            <input type="number" name="ingredient-quantity" id="ingredient-quantity" placeholder="Quantité" step="0.01">
+        `;
+
+        ingredientsDiv.insertBefore(ingredientLine, addIngredientButton);
+    }
+
+    addIngredientField();
+</script>
+</html>

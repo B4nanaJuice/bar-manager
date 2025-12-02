@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bières | La Niche</title>
+</head>
+<body>
+
+    <form action="{{ url_for('public.beers') }}" method="post">
+
+        <select name="beer-type" id="beer-type">
+            <option value="" selected>Sélectionner un type</option>
+            {% for beer_type in enums.beerType.__members__.keys() %}
+                <option value="{{ beer_type }}">{{ enums.beerType[beer_type].value|capitalize() }}</option>
+            {% endfor %}
+        </select>
+
+        <label for="beer-degree-min">Degré minimum</label>
+        <input type="range" name="beer-degree-min" id="beer-degree-min" min="0" max="50" step="1">
+        <label for="beer-degree-max">Degré maximum</label>
+        <input type="range" name="beer-degree-max" id="beer-degree-max" min="0" max="50" step="1">
+
+        <input type="radio" name="tag" id="all" value="all" checked>
+        <label for="all">Tout</label>
+        {% for tag in enums.tagName.__members__.keys() %}
+            <input type="radio" name="tag" id="{{ tag }}" value="{{ tag }}">
+            <label for="{{ tag }}">{{ enums.tagName[tag].value|capitalize() }}</label>
+        {% endfor %}
+
+        <input type="submit" value="Rechercher">
+    </form>
+
+    <div>
+        {% for beer in beers %}
+            {{ beer.name }}
+        {% endfor %}
+    </div>
+    
+
+    
+    
+</body>
+</html>

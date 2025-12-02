@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    
+    <form action="{{ url_for('admin.add_beer') }}" method="post">
+
+        <label for="beer-name">Beer name</label>
+        <input type="text" name="beer-name" id="beer-name">
+
+        <label for="beer-type">Beer type</label>
+        <select name="beer-type" id="beer-type">
+            <option value="">Sélectionner un type</option>
+            {% for beer_type in enums.beerType.__members__.keys() %}
+                <option value="{{ beer_type }}">{{ enums.beerType[beer_type].value|capitalize() }}</option>
+            {% endfor %}
+        </select>
+
+        <label for="beer-degree">Beer degree</label>
+        <input type="number" name="beer-degree" id="beer-degree" step="0.1">
+
+        <h3>Tags</h3>
+
+        {% for tag_name in enums.tagName.__members__.keys() %}
+            <label for="{{ tag_name }}">{{ enums.tagName[tag_name].value|capitalize() }}</label>
+            <input type="checkbox" name="{{ tag_name }}" id="{{ tag_name }}">
+        {% endfor %}
+
+        <input type="submit" value="Valider">
+    </form>
+
+    <ul class="beers">
+        {% for beer in beers %}
+        <li>
+            {{ beer.name }} - {{ beer.type }}
+            <form action="{{ url_for('admin.remove_beer') }}" method="post">
+                <input type="number" name="beer-id" id="beer-id" value="{{ beer.id }}">
+                <input type="submit" value="Delete">
+            </form>
+        </li>
+        {% endfor %}
+    </ul>
+    
+</body>
+</html>
