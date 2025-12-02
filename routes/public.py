@@ -1,112 +1,159 @@
-from flask import Blueprint, redirect, url_for, render_template, request, flash
-import json
-import re
-from typing import List
-from sqlalchemy.sql import exists
+from flask import Blueprint, request, render_template
 
 from data.database import db
 from data.models.cocktail import Cocktail
-from data.models.beer_stock import BeerStock
-from data.models.cocktail_ingredient import CocktailIngredient
-from data.models.ingredient_stock import IngredientStock
+from data.models.beer import Beer
+from data.models.drink import Drink
+from data.models.tag import Tag
+from data.models.enums import CocktailType, BeerType, TagName
 
-page = Blueprint("public", __name__, template_folder = "templates", static_folder = "static")
+from sqlalchemy.sql.functions import func
 
-@page.route("/", methods = ["GET"])
+page = Blueprint(name = 'public', import_name = __name__, url_prefix = '', template_folder = 'templates', static_folder = 'static')
+
+@page.route('/', methods = ['GET'])
+@page.route('/home', methods = ['GET'])
 def home():
-    return redirect(url_for("public.cocktails"))
+    return render_template('public/home.html')
 
-@page.route("/cocktails", methods = ["GET"])
+@page.route('/cocktails', methods = ['GET', 'POST'])
 def cocktails():
-    # Get URL arguments
-    cocktail_type: str = request.args.get("cocktail_type", type = str, default = None)
-    # ingredient_preferences: str = request.args.get("ingredient_preferences", type = str, default = None)
-    mocktail: bool = request.args.get("no_alcohol", type = bool, default = None)
-    cocktail_name: str = request.args.get("cocktail_name", type = str, default = None)
 
-    # Get the available ingredients for the cocktails
-    _query = db.select(IngredientStock.name)
-    available_ingredients: List[str] = db.session.execute(_query).scalars()
+    # Base query
+    _query = db.select(Cocktail).where(Cocktail.is_available)
 
-    # Create base query with only available ingredients
-    _subquery = (
-        db.select(CocktailIngredient.id)
-        .where(CocktailIngredient.cocktail_id == Cocktail.id)
-        .where(~CocktailIngredient.name.in_(db.session.query(IngredientStock.name)))
-    )
-    _query = db.select(Cocktail).where(~exists(_subquery))
+    search: dict = {}
 
-    # Add additional filters depending on the URL parameters
-    if cocktail_type:
-        _query = _query.where(Cocktail.type == cocktail_type)
+    if request.method == 'POST':
 
-    if mocktail:
-        _query = _query.where(Cocktail.has_alcohol == False)
+        # Get data from form
+        ## Get cocktail name
+        cocktail_name: str | None = request.form.get('cocktail-name') or None
 
-    if cocktail_name:
-        _query = _query.where(Cocktail.name.ilike(f"%{cocktail_name}%"))
-    
-    # Query
-    available_cocktails: List[Cocktail] = db.paginate(_query.order_by(Cocktail.name))
+        ## Get cocktail type
+        cocktail_type: str = request.form.get('cocktail-type').upper() or None
+        if cocktail_type and cocktail_type in CocktailType.__members__:
+            cocktail_type: CocktailType = CocktailType[cocktail_type]
+        else:
+            cocktail_type = None
 
-    # Paginate and after that : sort with ingredients
-    # So some cocktails can go to second page because initially they were there
-    # Make the last filter based on ingredient preferences
-    # Temp removed
-    # if ingredient_preferences:
-    #     ingredient_preferences: List[str] = ingredient_preferences.split(",")
+        ## Get if the user wants mocktails
+        no_alcohol: bool = request.form.get('no-alcohol') != None
 
-    #     # Compute the number of cocktail ingredients in the ingredient preferences
-    #     matches: List[tuple[Cocktail, int]] = [
-    #         (_c, len([_i for _i in [__i.name for __i in _c.ingredients] if _i in ingredient_preferences]))
-    #         for _c in available_cocktails.items
-    #     ]
+        ## Get the tag
+        tag: str | None = request.form.get('tag') or None
+        if tag == 'all':
+            tag = None
+        if tag and tag in TagName.__members__:
+            tag: TagName = TagName[tag]
+        else:
+            tag = None
 
-    #     # Sort the matches, take only the ones with at least 1 match and take the cocktails back
-    #     matches = sorted(matches, key = lambda _: _[1], reverse = True)
-    #     matches = [_ for _ in matches if _[1] >= 1]
-    #     available_cocktails.items = [_[0] for _ in matches]
+        # Add queries if filters
+        ## Filter by name
+        if cocktail_name:
+            _query = _query.where(Cocktail.name.ilike(f'%{cocktail_name}%'))
 
-    # Handle url arguments
-    url_args = dict(request.args)
-    if url_args.get("page"):
-        url_args.pop("page")
+        ## Filter by type
+        if cocktail_type:
+            _query = _query.where(Cocktail.type == cocktail_type)
 
-    return render_template("cocktails.html.jinja", page_title = "Cocktails", cocktails = available_cocktails, ingredients = available_ingredients, endpoint = request.endpoint, url_args = url_args)
+        ## Filter by alcohol presence
+        if no_alcohol:
+            _query = _query.where(Cocktail.has_alcohol == False)
 
-@page.route("/beers", methods = ["GET"])
+        ## Filter by tag
+        if tag:
+            _query = _query.where(Drink.tags.any(Tag.name == tag))
+
+        # Generate search values (prefill the search bar)
+        search = {
+            'cocktail_name': cocktail_name,
+            'cocktail_type': cocktail_type,
+            'no_alcohol': no_alcohol,
+            'tag': tag
+        }
+
+    cocktails: list[Cocktail] = list(db.paginate(_query))
+
+    enums = {
+        'cocktailType': CocktailType,
+        'tagName': TagName
+    }
+
+    return render_template('public/cocktails.html', cocktails = cocktails, enums = enums, search = search)
+
+@page.route('/beers', methods = ['GET', 'POST'])
 def beers():
-    # Get URL arguments
-    beer_type: str = request.args.get("beer_type", default = "")
 
-    # Get beers from type
-    _query = db.select(BeerStock)
-    if beer_type != "":
-        _query = _query.where(BeerStock.type == beer_type)
+    # Base query
+    _query = db.select(Beer).where(Beer.is_available)
 
-    # Query
-    beers: List[BeerStock] = db.paginate(_query.order_by(BeerStock.name))
+    search: dict = {}
 
-    # Get the beer types
-    _query = db.select(BeerStock.type)
-    beer_types: List[str] = list(set(db.session.execute(_query).scalars()))
+    if request.method == 'POST':
 
-    # Handle url arguments
-    url_args = dict(request.args)
-    if url_args.get("page"):
-        url_args.pop("page")
+        # Get data from form
+        ## Get the beer type
+        beer_type: str = request.form.get('beer-type').upper() or None
+        if beer_type and BeerType.__members__:
+            beer_type: BeerType = BeerType[beer_type]
+        else:
+            beer_type = None
 
-    # Render the template with the wanted beers
-    return render_template("beers.html.jinja", page_title = "Bières", beers = beers, beer_types = beer_types, endpoint = request.endpoint, url_args = url_args)
+        ## Get the beer degree
+        beer_degree_min: float = request.form.get('beer-degree-min') or 0
+        beer_degree_max: float = request.form.get('beer-degree-max') or 50
 
-@page.route("/others", methods = ["GET"])
+        ## Get the tag
+        tag: str | None = request.form.get('tag') or None
+        if tag == 'all':
+            tag = None
+        if tag and tag in TagName.__members__:
+            tag: TagName = TagName[tag]
+        else:
+            tag = None
+
+        # Add queries if filters
+        ## Filter by type
+        if beer_type:
+            _query = _query.where(Beer.type == beer_type)
+
+        ## Filter by beer degree
+        if beer_degree_min:
+            _query = _query.where(Beer.degree >= beer_degree_min)
+
+        if beer_degree_max:
+            _query = _query.where(Beer.degree <= beer_degree_max)
+
+        ## Filter by tag
+        if tag:
+            _query = _query.where(Drink.tags.any(Tag.name == tag))
+
+        # Generate search values (prefill the search bar)
+        search = {
+            'beer_type': beer_type,
+            'beer_degree_min': beer_degree_min,
+            'beer_degree_max': beer_degree_max,
+            'tag': tag
+        }
+
+    beers: list[Beer] = list(db.paginate(_query))
+
+    enums = {
+        'beerType': BeerType,
+        'tagName': TagName
+    }
+
+    return render_template('public/beers.html', beers = beers, enums = enums, search = search)
+
+@page.route('/others', methods = ['GET'])
 def others():
-    # Create base query
-    _query = db.select(IngredientStock)
+    drinks: list[Drink] = list(db.session.execute(db.select(Drink).where(Drink.is_available)).scalars())
+    return "Autres-"
 
-    # Filter to get only juices and syrups
-    juices: List[IngredientStock] = db.session.execute(_query.where(IngredientStock.name.startswith("Jus"))).scalars()
-    syrups: List[IngredientStock] = db.session.execute(_query.where(IngredientStock.name.startswith("Sirop"))).scalars()
-
-    # Render the template
-    return render_template("others.html.jinja", page_title = "Autres", juices = juices, syrups = syrups)
+@page.route('/random-cocktail', methods = ['GET'])
+def random_cocktail():
+    cocktail: Cocktail = db.session.execute(db.select(Cocktail).order_by(func.random()).limit(1)).scalar_one()
+    print(cocktail)
+    return f'sqd'
