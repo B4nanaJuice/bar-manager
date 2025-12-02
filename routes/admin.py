@@ -1,129 +1,270 @@
-from flask import Blueprint, render_template, request, redirect, url_for, session
-from typing import List
+from flask import Blueprint, request, render_template, redirect, url_for, current_app, session
 import os
 
 from data.database import db
+from data.models.enums import CocktailType, Glass, MixMethod, BeerType, TagName
 from data.models.cocktail import Cocktail
-from data.models.beer_stock import BeerStock
-from data.models.ingredient_stock import IngredientStock
 from data.models.cocktail_ingredient import CocktailIngredient
+from data.models.beer import Beer
+from data.models.drink import Drink
 from data.models.order import Order
+from data.models.tag import Tag
 
-page = Blueprint("admin", __name__, template_folder = "templates", static_folder = "static", url_prefix = "/admin")
+page = Blueprint(name = 'admin', import_name = __name__, url_prefix = '/admin', template_folder = 'templates', static_folder = 'static')
 
 @page.before_request
-def check_admin():
-    # Check if there is a user in the session
-    # If not, make the user goes to auth page
-    if 'user' not in session:
-        return redirect(url_for('auth.login', return_url = request.path))
-    
-    if session['user'] != os.getenv("ADMIN_USERNAME"):
-        session.pop('user')
-        return redirect(url_for('public.cocktails'))
+def before_request():
 
-@page.route("/", methods = ["GET", "POST"])
+    if 'auth' not in session:
+        session['redirect'] = request.url_rule.rule
+        current_app.logger.info(f'Someone not logged trying to access {request.url_rule.rule}. Redirecting.')
+        return redirect(url_for('auth.login'))
+    
+    if session['auth'] != os.getenv('ADMIN_USERNAME'):
+        session.pop('auth')
+        session['redirect'] = request.url_rule.rule
+        current_app.logger.info(f'Someone not logged trying to access {request.url_rule.rule}. Redirecting.')
+        return redirect(url_for('auth.login'))
+    
+    pass
+
+@page.route('/', methods = ['GET'])
 def admin_panel():
-    # Get the stocks from the database
-    beers: List[BeerStock] = db.session.execute(db.select(BeerStock)).scalars()
-    ingredient_stock: List[str] = list(db.session.execute(db.select(IngredientStock.name)).scalars())
-    ingredients: List[str] = list(set(db.session.execute(db.select(CocktailIngredient.name)).scalars()))
+    # Dashboard with cocktail count, beer count, order count, ...
+    # links to go to each manage page (cocktails, beers, others, orders, ...)
+    return "Panel admin"
 
-    return render_template("admin.html.jinja", beers = beers, ingredient_stock = ingredient_stock, ingredients = ingredients, page_title = "Panel admin")
+@page.route('/manage-cocktails', methods = ['GET'])
+def manage_cocktails():
 
-@page.route("/add-beer", methods = ["POST"])
+    cocktails: list[Cocktail] = list(db.session.execute(db.select(Cocktail)).scalars())
+
+    enums = {
+        'cocktailType': CocktailType,
+        'glass': Glass,
+        'mixMethod': MixMethod,
+        'tagName': TagName
+    }
+    
+    return render_template('admin/cocktail_form.html', cocktails = cocktails, enums = enums)
+
+@page.route('/add-cocktail', methods = ['POST'])
+def add_cocktail():
+
+    # Get data from the form 
+    ## Get cocktail name
+    cocktail_name: str = request.form.get('cocktail-name')
+
+    ## Get the cocktail type
+    cocktail_type: str = request.form.get('cocktail-type').upper()
+    if cocktail_type not in CocktailType.__members__:
+        current_app.logger.warning(f'The cocktail type {cocktail_type} is invalid.')
+        return redirect(url_for('admin.manage_cocktails'))
+    cocktail_type: CocktailType = CocktailType[cocktail_type]
+
+    ## Get if the cocktail contains alcohol or not
+    has_alcohol: bool = request.form.get('has-alcohol') != None
+
+    ## Get the glass type
+    glass: str = request.form.get('glass').upper()
+    if glass not in Glass.__members__:
+        current_app.logger.warning(f'The glass {glass} is invalid.')
+        return redirect(url_for('admin.manage_cocktails'))
+    glass: Glass = Glass[glass]
+
+    ## Get the mix method
+    mix_method: str = request.form.get('mix-method').upper()
+    if mix_method not in MixMethod.__members__:
+        current_app.logger.warning(f'The mix method {mix_method} is invalid.')
+        return redirect(url_for('admin.manage_cocktails'))
+    mix_method: MixMethod = MixMethod[mix_method]
+
+    ## Get the garnish
+    garnish: str | None = request.form.get('garnish') if request.form.get('garnish') != "" else None
+
+    ## Get all the ingredients
+    ingredient_names: list[str] = request.form.getlist('ingredient-name')
+    ingredient_quantities: list[float] = request.form.getlist('ingredient-quantity')
+    if len(ingredient_names) != len(ingredient_quantities):
+        current_app.logger.warning(f'You must provide as much ingredient names ({len(ingredient_names)}) as quantities ({len(ingredient_quantities)}).')
+        return redirect(url_for('admin.manage_cocktails'))
+    ingredients: list[tuple[str, float]] = [(ingredient_names[_], ingredient_quantities[_]) for _ in range(len(ingredient_names))]
+    ingredients: list[CocktailIngredient] = [CocktailIngredient(name = _[0], quantity = _[1]) for _ in ingredients]
+
+    ## Get the cocktail's tags
+    checkbox = [_ for _ in request.form if request.form.get(_) == 'on' and _ != 'has-alcohol']
+    tags: list[Tag] = []
+    for _ in checkbox:
+        if _ in TagName.__members__:
+            tags.append(Tag(name = TagName[_]))
+
+    # Create the cocktial object
+    cocktail: Cocktail = Cocktail(name = cocktail_name, type = cocktail_type, has_alcohol = has_alcohol, glass = glass,
+                                  mix_method = mix_method, garnish = garnish, ingredients = ingredients, tags = tags)
+    
+    # Insert it into the database
+    try:
+        current_app.logger.info(f'{cocktail.name} is being inserted to the database.')
+        db.session.add(cocktail)
+        db.session.commit()
+    except:
+        current_app.logger.error('Something went wrong while trying to insert cocktail into the database.')
+
+    return redirect(url_for('admin.manage_cocktails'))
+
+@page.route('/remove-cocktail', methods = ['POST'])
+def remove_cocktail():
+
+    cocktail_id: int = request.form.get('cocktail-id', type = int)
+    cocktail: Cocktail | None = db.session.execute(db.select(Cocktail).where(Cocktail.id == cocktail_id)).scalar_one_or_none()
+    if not cocktail:
+        current_app.logger.warning(f'No cocktail with id {cocktail_id} exists.')
+        return redirect(url_for('admin.manage_cocktails'))
+    
+    try:
+        current_app.logger.info(f'{cocktail.name} is being deleted.')
+        db.session.delete(cocktail)
+        db.session.commit()
+    except:
+        current_app.logger.error('Something went wrong while trying to delete the cocktail.')
+
+    return redirect(url_for('admin.manage_cocktails'))
+
+@page.route('/manage-beers', methods = ['GET'])
+def manage_beers():
+
+    beers: list[Beer] = list(db.session.execute(db.select(Beer)).scalars())
+
+    enums = {
+        'beerType': BeerType,
+        'tagName': TagName
+    }
+
+    return render_template('admin/beer_form.html', beers = beers, enums = enums)
+
+@page.route('/add-beer', methods = ['POST'])
 def add_beer():
-    # Get data form the form
-    beer_name: str = request.form.get("beerName") or None
-    beer_type: str = request.form.get("beerType") or None
-    beer_degree: float = int(request.form.get("beerDegree") or -1)
 
-    if beer_name and beer_type and beer_degree >= 0:
-        # Add the beer to the database
-        beer_stock: BeerStock = BeerStock(name = beer_name, type = beer_type, degree = beer_degree)
-        try:
-            db.session.add(beer_stock)
-            db.session.commit()
-        except: 
-            print(f"An error occured while trying to add the beer {beer_stock} to the database.")
+    # Get data from form
+    ## Get the beer name
+    beer_name: str = request.form.get('beer-name')
+
+    ## Get the beer type
+    beer_type: str = request.form.get('beer-type').upper()
+    if beer_type not in BeerType.__members__:
+        current_app.logger.warning('The beer type {beer_type} is invalid.')
+        return redirect(url_for('admin.manage_beers'))
+    beer_type: BeerType = BeerType[beer_type]
+
+    ## Get the beer degree
+    beer_degree: float = request.form.get('beer-degree', type = float)
+
+    ## Get the tags for the beer
+    checkbox = [_ for _ in request.form if request.form.get(_) == 'on']
+    tags: list[Tag] = []
+    for _ in checkbox:
+        if _ in TagName.__members__:
+            tags.append(Tag(name = TagName[_]))
+
+    # Create the beer object
+    beer: Beer = Beer(name = beer_name, type = beer_type, degree = beer_degree, tags = tags)
+
+    # Append the beer to the database
+    try:
+        current_app.logger.info(f'{beer.name} is being inserted into the database.')
+        db.session.add(beer)
+        db.session.commit()
+    except:
+        current_app.logger.error('Something went wrong while trying to insert the beer into the database.')
+
+    return redirect(url_for('admin.manage_beers'))
+
+@page.route('/remove_beer', methods = ['POST'])
+def remove_beer():
+
+    beer_id: int = request.form.get('beer-id', type = int)
+    beer: Beer | None = db.session.execute(db.select(Beer).where(Beer.id == beer_id)).scalar_one_or_none()
+    if not beer:
+        current_app.logger.warning(f'No beer with id {beer_id} exists.')
+        return redirect(url_for('admin.manage_beers'))
     
-    return redirect(url_for("admin.admin_panel"))
-
-@page.route("/remove-beer/<int:beer_id>", methods = ["GET"])
-def remove_beer(beer_id: int):
-    # Get the beer from the id
-    _query = db.select(BeerStock).where(BeerStock.id == beer_id)
-    beer_stock: BeerStock = db.session.execute(_query).scalar_one_or_none()
-
-    # Remove the beer from the database
-    if beer_stock:
-        try:
-            db.session.delete(beer_stock)
-            db.session.commit()
-        except:
-            print(f"An error occured while trying to remove the beer {beer_stock} from the database.")
-
-    return redirect(url_for("admin.admin_panel"))
-
-@page.route("/update-ingredients-stocks", methods = ["POST"])
-def update_ingredients_stock():
-    # Get all the ingredients and remove them
-    _query = db.select(IngredientStock)
-    ingredients_stock: List[IngredientStock] = db.session.execute(_query).scalars()
     try:
-        for _ in ingredients_stock:
-            db.session.delete(_)
+        current_app.logger.info(f'{beer.name} is being deleted.')
+        db.session.delete(beer)
         db.session.commit()
     except:
-        print(f"An error occured while trying to delete an ingredient.")
+        current_app.logger.error('Something went wrong while trying to delete the beer.')
 
-    # Get the new ingredients
-    new_stock: List[str] = [i for i in request.form if request.form.get(i) == 'on']
+    return redirect(url_for('admin.manage_beers'))
 
-    ingredients_stock = [IngredientStock(name = _) for _ in new_stock]
+@page.route('/manage-others', methods = ['GET'])
+def manage_others():
+
+    drinks: list[Drink] = list(db.session.execute(
+        db.select(Drink)
+        .where(Drink.drink_type != 'cocktail')
+        .where(Drink.drink_type != 'beer')
+    ))
+
+    return "Manage others"
+
+@page.route('/add_others', methods = ['POST'])
+def add_others():
+
+    drink_name: str = request.form.get('drink-name')
+    
+    drink_type: str = request.form.get('drink-type')
+
+    drink: Drink = Drink(name = drink_name, drink_type = drink_type)
+
     try:
-        db.session.add_all(ingredients_stock)
+        current_app.logger.info(f'{drink.name} is being inserted into the database.')
+        db.session.add(drink)
         db.session.commit()
     except:
-        print("An error occured while trying to add ingredients to the stock.")
+        current_app.logger.error('Something went wrong while trying to insert the drink into the database.')
 
-    # Redirect to admin panel
-    return redirect(url_for('admin.admin_panel'))
+    return redirect(url_for('admin.manage_others'))
 
-@page.route("/orders", methods = ['GET'])
+@page.route('/remove-others', methods = ['POST'])
+def remove_others():
+    
+    drink_id: int = request.form.get('drink-id', type = int)
+    drink: Drink | None = db.session.execute(db.select(Drink).where(Drink.id == drink_id)).scalar_one_or_none()
+    if not drink:
+        current_app.logger.warning(f'No beer with id {drink_id} exists.')
+        return redirect(url_for('admin.manage_drinks'))
+    
+    try:
+        current_app.logger.info(f'{drink.name} is being deleted.')
+        db.session.delete(drink)
+        db.session.commit()
+    except:
+        current_app.logger.error('Something went wrong while trying to delete the drink.')
+
+    return redirect(url_for('admin.manage_drinks'))
+
+@page.route('/orders', methods = ['GET'])
 def orders():
-    _query = db.select(Order)
-    orders: List[Order] = list(db.session.execute(_query).scalars())
 
-    return render_template("admin_orders.html.jinja", page_title = "Commandes", orders = orders)
+    orders: list[Order] = list(db.session.execute(db.select(Order)).scalars())
 
-@page.route("/remove-order", methods = ['GET'])
+    return "Commandes"
+
+@page.route('/remove-order', methods = ['POST'])
 def remove_order():
-    try:
-        order_id: int = request.args.get('order_id', type = int)
-    except:
-        return redirect(url_for('admin.orders'))
-    
-    if not order_id or order_id == "":
-        return redirect(url_for('admin.orders'))
-    
-    order: Order = db.session.execute(db.select(Order).where(Order.id == order_id)).scalar_one_or_none()
+
+    order_id: int = request.form.get('order-id')
+    order: Order | None = db.session.execute(db.select(Order).where(Order.id == order_id)).scalar_one_or_none()
     if not order:
+        current_app.logger.warning(f'No order with id {order_id} exists.')
         return redirect(url_for('admin.orders'))
     
-    db.session.delete(order)
-    db.session.commit()
+    try:
+        current_app.logger.info(f'{order.name} is being deleted.')
+        db.session.delete(order)
+        db.session.commit()
+    except:
+        current_app.logger.error('Something went wrong while trying to delete the order.')
 
     return redirect(url_for('admin.orders'))
-
-@page.route("/populate", methods = ["GET"])
-def populate():
-    # This function is only here to add content to the database
-    # cocktails: List[Cocktail] = [
-
-    # ]
-
-    # db.session.add_all(cocktails)
-    # db.session.commit()
-
-    return redirect(url_for("public.cocktails"))
